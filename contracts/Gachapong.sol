@@ -127,6 +127,11 @@ contract Gachapong is
         addOnPoolReward = _addOnPoolReward;
     }
 
+    function setWallet(address _wallet) external onlyOwner whenPaused {
+        require(_wallet != address(0), "Gachapong.sol: Must be address.");
+        wallet = _wallet;
+    }
+
     function buyLottery(
         LotteryType _type,
         uint256 _number,

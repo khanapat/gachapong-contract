@@ -12,6 +12,7 @@ export type { ERC20 } from "./ERC20";
 export type { IERC20Metadata } from "./IERC20Metadata";
 export type { IERC20 } from "./IERC20";
 export type { Gachapong } from "./Gachapong";
+export type { Jackpot } from "./Jackpot";
 export type { StableCoin } from "./StableCoin";
 
 export { AccessControlUpgradeable__factory } from "./factories/AccessControlUpgradeable__factory";
@@ -25,4 +26,5 @@ export { ERC20__factory } from "./factories/ERC20__factory";
 export { IERC20Metadata__factory } from "./factories/IERC20Metadata__factory";
 export { IERC20__factory } from "./factories/IERC20__factory";
 export { Gachapong__factory } from "./factories/Gachapong__factory";
+export { Jackpot__factory } from "./factories/Jackpot__factory";
 export { StableCoin__factory } from "./factories/StableCoin__factory";
