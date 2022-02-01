@@ -21,14 +21,62 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface GachapongInterface extends ethers.utils.Interface {
   functions: {
-    "buyLottery(uint256,uint256)": FunctionFragment;
+    "DEFAULT_ADMIN_ROLE()": FunctionFragment;
+    "WORKER_ROLE()": FunctionFragment;
+    "addOnPoolReward()": FunctionFragment;
+    "buyLottery(uint8,uint256,uint256)": FunctionFragment;
+    "claimReward(uint256)": FunctionFragment;
+    "closeRound(uint256,uint256)": FunctionFragment;
     "currentLotteryId()": FunctionFragment;
     "currentLotteryRound()": FunctionFragment;
+    "generateRandom(uint256)": FunctionFragment;
+    "getRoleAdmin(bytes32)": FunctionFragment;
+    "grantRole(bytes32,address)": FunctionFragment;
+    "hasRole(bytes32,address)": FunctionFragment;
+    "initialize(address,address,uint16,uint16,uint16)": FunctionFragment;
     "lotteries(uint256)": FunctionFragment;
+    "owner()": FunctionFragment;
+    "pause()": FunctionFragment;
+    "paused()": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
+    "renounceRole(bytes32,address)": FunctionFragment;
+    "revokeRole(bytes32,address)": FunctionFragment;
+    "rounds(uint256)": FunctionFragment;
+    "setAddOnPoolReward(uint16)": FunctionFragment;
+    "setMultiplyReward(uint16,uint16)": FunctionFragment;
+    "supportsInterface(bytes4)": FunctionFragment;
+    "threeDigitReward()": FunctionFragment;
+    "token()": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
+    "twoDigitReward()": FunctionFragment;
+    "unpause()": FunctionFragment;
+    "userLotteries(address,uint256,uint256)": FunctionFragment;
+    "viewReward(uint256)": FunctionFragment;
+    "wallet()": FunctionFragment;
   };
 
   encodeFunctionData(
+    functionFragment: "DEFAULT_ADMIN_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "WORKER_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "addOnPoolReward",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "buyLottery",
+    values: [BigNumberish, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "claimReward",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "closeRound",
     values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
@@ -40,11 +88,102 @@ interface GachapongInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "generateRandom",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getRoleAdmin",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "grantRole",
+    values: [BytesLike, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "hasRole",
+    values: [BytesLike, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "initialize",
+    values: [string, string, BigNumberish, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "lotteries",
     values: [BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(functionFragment: "pause", values?: undefined): string;
+  encodeFunctionData(functionFragment: "paused", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "renounceOwnership",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "renounceRole",
+    values: [BytesLike, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "revokeRole",
+    values: [BytesLike, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "rounds",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setAddOnPoolReward",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setMultiplyReward",
+    values: [BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "supportsInterface",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "threeDigitReward",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "token", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "twoDigitReward",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "unpause", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "userLotteries",
+    values: [string, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "viewReward",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(functionFragment: "wallet", values?: undefined): string;
 
+  decodeFunctionResult(
+    functionFragment: "DEFAULT_ADMIN_ROLE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "WORKER_ROLE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "addOnPoolReward",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "buyLottery", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "claimReward",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "closeRound", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "currentLotteryId",
     data: BytesLike
@@ -53,10 +192,148 @@ interface GachapongInterface extends ethers.utils.Interface {
     functionFragment: "currentLotteryRound",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "generateRandom",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getRoleAdmin",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "lotteries", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "pause", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceRole",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "rounds", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setAddOnPoolReward",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setMultiplyReward",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "supportsInterface",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "threeDigitReward",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "token", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "twoDigitReward",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "unpause", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "userLotteries",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "viewReward", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "wallet", data: BytesLike): Result;
 
-  events: {};
+  events: {
+    "BuyLottery(uint256,uint256,address,uint8,uint256,uint256)": EventFragment;
+    "ClaimReward(uint256,uint256,address,uint256)": EventFragment;
+    "CloseRound(uint256,uint256,uint256)": EventFragment;
+    "GenerateRandom(uint256,uint16,uint16)": EventFragment;
+    "OwnershipTransferred(address,address)": EventFragment;
+    "Paused(address)": EventFragment;
+    "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
+    "RoleGranted(bytes32,address,address)": EventFragment;
+    "RoleRevoked(bytes32,address,address)": EventFragment;
+    "Unpaused(address)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "BuyLottery"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ClaimReward"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "CloseRound"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "GenerateRandom"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "RoleAdminChanged"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "RoleGranted"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "RoleRevoked"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
 }
+
+export type BuyLotteryEvent = TypedEvent<
+  [BigNumber, BigNumber, string, number, BigNumber, BigNumber] & {
+    round: BigNumber;
+    id: BigNumber;
+    buyer: string;
+    lotteryType: number;
+    number: BigNumber;
+    amount: BigNumber;
+  }
+>;
+
+export type ClaimRewardEvent = TypedEvent<
+  [BigNumber, BigNumber, string, BigNumber] & {
+    round: BigNumber;
+    id: BigNumber;
+    owner: string;
+    reward: BigNumber;
+  }
+>;
+
+export type CloseRoundEvent = TypedEvent<
+  [BigNumber, BigNumber, BigNumber] & {
+    round: BigNumber;
+    twoDigitRef: BigNumber;
+    threeDigitRef: BigNumber;
+  }
+>;
+
+export type GenerateRandomEvent = TypedEvent<
+  [BigNumber, number, number] & {
+    round: BigNumber;
+    twoDigitRandom: number;
+    threeDigitRandom: number;
+  }
+>;
+
+export type OwnershipTransferredEvent = TypedEvent<
+  [string, string] & { previousOwner: string; newOwner: string }
+>;
+
+export type PausedEvent = TypedEvent<[string] & { account: string }>;
+
+export type RoleAdminChangedEvent = TypedEvent<
+  [string, string, string] & {
+    role: string;
+    previousAdminRole: string;
+    newAdminRole: string;
+  }
+>;
+
+export type RoleGrantedEvent = TypedEvent<
+  [string, string, string] & { role: string; account: string; sender: string }
+>;
+
+export type RoleRevokedEvent = TypedEvent<
+  [string, string, string] & { role: string; account: string; sender: string }
+>;
+
+export type UnpausedEvent = TypedEvent<[string] & { account: string }>;
 
 export class Gachapong extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -102,9 +379,27 @@ export class Gachapong extends BaseContract {
   interface: GachapongInterface;
 
   functions: {
+    DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<[string]>;
+
+    WORKER_ROLE(overrides?: CallOverrides): Promise<[string]>;
+
+    addOnPoolReward(overrides?: CallOverrides): Promise<[number]>;
+
     buyLottery(
+      _type: BigNumberish,
       _number: BigNumberish,
       _amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    claimReward(
+      _lotteryId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    closeRound(
+      _twoDigitRef: BigNumberish,
+      _threeDigitRef: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -112,22 +407,151 @@ export class Gachapong extends BaseContract {
 
     currentLotteryRound(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    generateRandom(
+      _round: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<[string]>;
+
+    grantRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    hasRole(
+      role: BytesLike,
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
+    initialize(
+      _wallet: string,
+      _token: string,
+      _twoDigitReward: BigNumberish,
+      _threeDigitReward: BigNumberish,
+      _addOnPoolReward: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     lotteries(
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, BigNumber, string] & {
-        round: BigNumber;
-        number: BigNumber;
+      [BigNumber, number, BigNumber, BigNumber, string] & {
+        lotteryRound: BigNumber;
+        lotteryType: number;
+        lotteryNumber: BigNumber;
         amount: BigNumber;
         owner: string;
       }
     >;
+
+    owner(overrides?: CallOverrides): Promise<[string]>;
+
+    pause(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    paused(overrides?: CallOverrides): Promise<[boolean]>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    renounceRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    revokeRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    rounds(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber, number, number, boolean] & {
+        twoDigitRef: BigNumber;
+        threeDigitRef: BigNumber;
+        twoDigitNumber: number;
+        threeDigitNumber: number;
+        isClaimable: boolean;
+      }
+    >;
+
+    setAddOnPoolReward(
+      _addOnPoolReward: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setMultiplyReward(
+      _twoDigitReward: BigNumberish,
+      _threeDigitReward: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    supportsInterface(
+      interfaceId: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
+    threeDigitReward(overrides?: CallOverrides): Promise<[number]>;
+
+    token(overrides?: CallOverrides): Promise<[string]>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    twoDigitReward(overrides?: CallOverrides): Promise<[number]>;
+
+    unpause(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    userLotteries(
+      arg0: string,
+      arg1: BigNumberish,
+      arg2: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    viewReward(
+      _lotteryId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    wallet(overrides?: CallOverrides): Promise<[string]>;
   };
 
+  DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
+
+  WORKER_ROLE(overrides?: CallOverrides): Promise<string>;
+
+  addOnPoolReward(overrides?: CallOverrides): Promise<number>;
+
   buyLottery(
+    _type: BigNumberish,
     _number: BigNumberish,
     _amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  claimReward(
+    _lotteryId: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  closeRound(
+    _twoDigitRef: BigNumberish,
+    _threeDigitRef: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -135,22 +559,151 @@ export class Gachapong extends BaseContract {
 
   currentLotteryRound(overrides?: CallOverrides): Promise<BigNumber>;
 
+  generateRandom(
+    _round: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
+
+  grantRole(
+    role: BytesLike,
+    account: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  hasRole(
+    role: BytesLike,
+    account: string,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  initialize(
+    _wallet: string,
+    _token: string,
+    _twoDigitReward: BigNumberish,
+    _threeDigitReward: BigNumberish,
+    _addOnPoolReward: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   lotteries(
     arg0: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    [BigNumber, BigNumber, BigNumber, string] & {
-      round: BigNumber;
-      number: BigNumber;
+    [BigNumber, number, BigNumber, BigNumber, string] & {
+      lotteryRound: BigNumber;
+      lotteryType: number;
+      lotteryNumber: BigNumber;
       amount: BigNumber;
       owner: string;
     }
   >;
 
+  owner(overrides?: CallOverrides): Promise<string>;
+
+  pause(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  paused(overrides?: CallOverrides): Promise<boolean>;
+
+  renounceOwnership(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  renounceRole(
+    role: BytesLike,
+    account: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  revokeRole(
+    role: BytesLike,
+    account: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  rounds(
+    arg0: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<
+    [BigNumber, BigNumber, number, number, boolean] & {
+      twoDigitRef: BigNumber;
+      threeDigitRef: BigNumber;
+      twoDigitNumber: number;
+      threeDigitNumber: number;
+      isClaimable: boolean;
+    }
+  >;
+
+  setAddOnPoolReward(
+    _addOnPoolReward: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setMultiplyReward(
+    _twoDigitReward: BigNumberish,
+    _threeDigitReward: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  supportsInterface(
+    interfaceId: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  threeDigitReward(overrides?: CallOverrides): Promise<number>;
+
+  token(overrides?: CallOverrides): Promise<string>;
+
+  transferOwnership(
+    newOwner: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  twoDigitReward(overrides?: CallOverrides): Promise<number>;
+
+  unpause(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  userLotteries(
+    arg0: string,
+    arg1: BigNumberish,
+    arg2: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  viewReward(
+    _lotteryId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  wallet(overrides?: CallOverrides): Promise<string>;
+
   callStatic: {
+    DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
+
+    WORKER_ROLE(overrides?: CallOverrides): Promise<string>;
+
+    addOnPoolReward(overrides?: CallOverrides): Promise<number>;
+
     buyLottery(
+      _type: BigNumberish,
       _number: BigNumberish,
       _amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    claimReward(
+      _lotteryId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    closeRound(
+      _twoDigitRef: BigNumberish,
+      _threeDigitRef: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -158,25 +711,324 @@ export class Gachapong extends BaseContract {
 
     currentLotteryRound(overrides?: CallOverrides): Promise<BigNumber>;
 
+    generateRandom(
+      _round: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
+
+    grantRole(
+      role: BytesLike,
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    hasRole(
+      role: BytesLike,
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    initialize(
+      _wallet: string,
+      _token: string,
+      _twoDigitReward: BigNumberish,
+      _threeDigitReward: BigNumberish,
+      _addOnPoolReward: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     lotteries(
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, BigNumber, BigNumber, string] & {
-        round: BigNumber;
-        number: BigNumber;
+      [BigNumber, number, BigNumber, BigNumber, string] & {
+        lotteryRound: BigNumber;
+        lotteryType: number;
+        lotteryNumber: BigNumber;
         amount: BigNumber;
         owner: string;
       }
     >;
+
+    owner(overrides?: CallOverrides): Promise<string>;
+
+    pause(overrides?: CallOverrides): Promise<void>;
+
+    paused(overrides?: CallOverrides): Promise<boolean>;
+
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    renounceRole(
+      role: BytesLike,
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    revokeRole(
+      role: BytesLike,
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    rounds(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber, number, number, boolean] & {
+        twoDigitRef: BigNumber;
+        threeDigitRef: BigNumber;
+        twoDigitNumber: number;
+        threeDigitNumber: number;
+        isClaimable: boolean;
+      }
+    >;
+
+    setAddOnPoolReward(
+      _addOnPoolReward: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setMultiplyReward(
+      _twoDigitReward: BigNumberish,
+      _threeDigitReward: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    supportsInterface(
+      interfaceId: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    threeDigitReward(overrides?: CallOverrides): Promise<number>;
+
+    token(overrides?: CallOverrides): Promise<string>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    twoDigitReward(overrides?: CallOverrides): Promise<number>;
+
+    unpause(overrides?: CallOverrides): Promise<void>;
+
+    userLotteries(
+      arg0: string,
+      arg1: BigNumberish,
+      arg2: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    viewReward(
+      _lotteryId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    wallet(overrides?: CallOverrides): Promise<string>;
   };
 
-  filters: {};
+  filters: {
+    "BuyLottery(uint256,uint256,address,uint8,uint256,uint256)"(
+      round?: BigNumberish | null,
+      id?: BigNumberish | null,
+      buyer?: null,
+      lotteryType?: null,
+      number?: null,
+      amount?: null
+    ): TypedEventFilter<
+      [BigNumber, BigNumber, string, number, BigNumber, BigNumber],
+      {
+        round: BigNumber;
+        id: BigNumber;
+        buyer: string;
+        lotteryType: number;
+        number: BigNumber;
+        amount: BigNumber;
+      }
+    >;
+
+    BuyLottery(
+      round?: BigNumberish | null,
+      id?: BigNumberish | null,
+      buyer?: null,
+      lotteryType?: null,
+      number?: null,
+      amount?: null
+    ): TypedEventFilter<
+      [BigNumber, BigNumber, string, number, BigNumber, BigNumber],
+      {
+        round: BigNumber;
+        id: BigNumber;
+        buyer: string;
+        lotteryType: number;
+        number: BigNumber;
+        amount: BigNumber;
+      }
+    >;
+
+    "ClaimReward(uint256,uint256,address,uint256)"(
+      round?: BigNumberish | null,
+      id?: BigNumberish | null,
+      owner?: null,
+      reward?: null
+    ): TypedEventFilter<
+      [BigNumber, BigNumber, string, BigNumber],
+      { round: BigNumber; id: BigNumber; owner: string; reward: BigNumber }
+    >;
+
+    ClaimReward(
+      round?: BigNumberish | null,
+      id?: BigNumberish | null,
+      owner?: null,
+      reward?: null
+    ): TypedEventFilter<
+      [BigNumber, BigNumber, string, BigNumber],
+      { round: BigNumber; id: BigNumber; owner: string; reward: BigNumber }
+    >;
+
+    "CloseRound(uint256,uint256,uint256)"(
+      round?: BigNumberish | null,
+      twoDigitRef?: null,
+      threeDigitRef?: null
+    ): TypedEventFilter<
+      [BigNumber, BigNumber, BigNumber],
+      { round: BigNumber; twoDigitRef: BigNumber; threeDigitRef: BigNumber }
+    >;
+
+    CloseRound(
+      round?: BigNumberish | null,
+      twoDigitRef?: null,
+      threeDigitRef?: null
+    ): TypedEventFilter<
+      [BigNumber, BigNumber, BigNumber],
+      { round: BigNumber; twoDigitRef: BigNumber; threeDigitRef: BigNumber }
+    >;
+
+    "GenerateRandom(uint256,uint16,uint16)"(
+      round?: BigNumberish | null,
+      twoDigitRandom?: null,
+      threeDigitRandom?: null
+    ): TypedEventFilter<
+      [BigNumber, number, number],
+      { round: BigNumber; twoDigitRandom: number; threeDigitRandom: number }
+    >;
+
+    GenerateRandom(
+      round?: BigNumberish | null,
+      twoDigitRandom?: null,
+      threeDigitRandom?: null
+    ): TypedEventFilter<
+      [BigNumber, number, number],
+      { round: BigNumber; twoDigitRandom: number; threeDigitRandom: number }
+    >;
+
+    "OwnershipTransferred(address,address)"(
+      previousOwner?: string | null,
+      newOwner?: string | null
+    ): TypedEventFilter<
+      [string, string],
+      { previousOwner: string; newOwner: string }
+    >;
+
+    OwnershipTransferred(
+      previousOwner?: string | null,
+      newOwner?: string | null
+    ): TypedEventFilter<
+      [string, string],
+      { previousOwner: string; newOwner: string }
+    >;
+
+    "Paused(address)"(
+      account?: null
+    ): TypedEventFilter<[string], { account: string }>;
+
+    Paused(account?: null): TypedEventFilter<[string], { account: string }>;
+
+    "RoleAdminChanged(bytes32,bytes32,bytes32)"(
+      role?: BytesLike | null,
+      previousAdminRole?: BytesLike | null,
+      newAdminRole?: BytesLike | null
+    ): TypedEventFilter<
+      [string, string, string],
+      { role: string; previousAdminRole: string; newAdminRole: string }
+    >;
+
+    RoleAdminChanged(
+      role?: BytesLike | null,
+      previousAdminRole?: BytesLike | null,
+      newAdminRole?: BytesLike | null
+    ): TypedEventFilter<
+      [string, string, string],
+      { role: string; previousAdminRole: string; newAdminRole: string }
+    >;
+
+    "RoleGranted(bytes32,address,address)"(
+      role?: BytesLike | null,
+      account?: string | null,
+      sender?: string | null
+    ): TypedEventFilter<
+      [string, string, string],
+      { role: string; account: string; sender: string }
+    >;
+
+    RoleGranted(
+      role?: BytesLike | null,
+      account?: string | null,
+      sender?: string | null
+    ): TypedEventFilter<
+      [string, string, string],
+      { role: string; account: string; sender: string }
+    >;
+
+    "RoleRevoked(bytes32,address,address)"(
+      role?: BytesLike | null,
+      account?: string | null,
+      sender?: string | null
+    ): TypedEventFilter<
+      [string, string, string],
+      { role: string; account: string; sender: string }
+    >;
+
+    RoleRevoked(
+      role?: BytesLike | null,
+      account?: string | null,
+      sender?: string | null
+    ): TypedEventFilter<
+      [string, string, string],
+      { role: string; account: string; sender: string }
+    >;
+
+    "Unpaused(address)"(
+      account?: null
+    ): TypedEventFilter<[string], { account: string }>;
+
+    Unpaused(account?: null): TypedEventFilter<[string], { account: string }>;
+  };
 
   estimateGas: {
+    DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
+
+    WORKER_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
+
+    addOnPoolReward(overrides?: CallOverrides): Promise<BigNumber>;
+
     buyLottery(
+      _type: BigNumberish,
       _number: BigNumberish,
       _amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    claimReward(
+      _lotteryId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    closeRound(
+      _twoDigitRef: BigNumberish,
+      _threeDigitRef: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -184,16 +1036,138 @@ export class Gachapong extends BaseContract {
 
     currentLotteryRound(overrides?: CallOverrides): Promise<BigNumber>;
 
+    generateRandom(
+      _round: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    getRoleAdmin(
+      role: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    grantRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    hasRole(
+      role: BytesLike,
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    initialize(
+      _wallet: string,
+      _token: string,
+      _twoDigitReward: BigNumberish,
+      _threeDigitReward: BigNumberish,
+      _addOnPoolReward: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     lotteries(
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
+
+    pause(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    paused(overrides?: CallOverrides): Promise<BigNumber>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    renounceRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    revokeRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    rounds(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    setAddOnPoolReward(
+      _addOnPoolReward: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setMultiplyReward(
+      _twoDigitReward: BigNumberish,
+      _threeDigitReward: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    supportsInterface(
+      interfaceId: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    threeDigitReward(overrides?: CallOverrides): Promise<BigNumber>;
+
+    token(overrides?: CallOverrides): Promise<BigNumber>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    twoDigitReward(overrides?: CallOverrides): Promise<BigNumber>;
+
+    unpause(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    userLotteries(
+      arg0: string,
+      arg1: BigNumberish,
+      arg2: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    viewReward(
+      _lotteryId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    wallet(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    DEFAULT_ADMIN_ROLE(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    WORKER_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    addOnPoolReward(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     buyLottery(
+      _type: BigNumberish,
       _number: BigNumberish,
       _amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    claimReward(
+      _lotteryId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    closeRound(
+      _twoDigitRef: BigNumberish,
+      _threeDigitRef: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -203,9 +1177,114 @@ export class Gachapong extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    generateRandom(
+      _round: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    getRoleAdmin(
+      role: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    grantRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    hasRole(
+      role: BytesLike,
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    initialize(
+      _wallet: string,
+      _token: string,
+      _twoDigitReward: BigNumberish,
+      _threeDigitReward: BigNumberish,
+      _addOnPoolReward: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     lotteries(
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    pause(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    paused(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    renounceRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    revokeRole(
+      role: BytesLike,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    rounds(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    setAddOnPoolReward(
+      _addOnPoolReward: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setMultiplyReward(
+      _twoDigitReward: BigNumberish,
+      _threeDigitReward: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    supportsInterface(
+      interfaceId: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    threeDigitReward(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    token(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    twoDigitReward(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    unpause(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    userLotteries(
+      arg0: string,
+      arg1: BigNumberish,
+      arg2: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    viewReward(
+      _lotteryId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    wallet(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

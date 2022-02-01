@@ -7,8 +7,8 @@ import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 
 contract Gachapong is
     Initializable,
@@ -17,7 +17,7 @@ contract Gachapong is
     ReentrancyGuardUpgradeable,
     PausableUpgradeable
 {
-    using SafeERC20 for IERC20;
+    using SafeERC20Upgradeable for IERC20Upgradeable;
 
     enum LotteryType {
         TwoDigit,
@@ -50,7 +50,7 @@ contract Gachapong is
 
     bytes32 public constant WORKER_ROLE = keccak256("WORKER_ROLE");
 
-    IERC20 public token;
+    IERC20Upgradeable public token;
 
     mapping(uint256 => Lottery) public lotteries;
     mapping(uint256 => LotteryResult) public rounds;
@@ -60,6 +60,7 @@ contract Gachapong is
         uint256 indexed round,
         uint256 indexed id,
         address buyer,
+        LotteryType lotteryType,
         uint256 number,
         uint256 amount
     );
@@ -97,7 +98,7 @@ contract Gachapong is
 
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
 
-        token = IERC20(_token);
+        token = IERC20Upgradeable(_token);
         wallet = _wallet;
         twoDigitReward = _twoDigitReward;
         threeDigitReward = _threeDigitReward;
@@ -107,6 +108,7 @@ contract Gachapong is
     function setMultiplyReward(uint16 _twoDigitReward, uint16 _threeDigitReward)
         external
         onlyOwner
+        whenPaused
     {
         require(
             _twoDigitReward != 0 && _threeDigitReward != 0,
@@ -116,7 +118,11 @@ contract Gachapong is
         threeDigitReward = _threeDigitReward;
     }
 
-    function setAddOnPoolReward(uint16 _addOnPoolReward) external onlyOwner {
+    function setAddOnPoolReward(uint16 _addOnPoolReward)
+        external
+        onlyOwner
+        whenPaused
+    {
         require(_addOnPoolReward != 0, "Gachapong.sol: Must be > 0.");
         addOnPoolReward = _addOnPoolReward;
     }
@@ -150,6 +156,7 @@ contract Gachapong is
             lottery.lotteryRound,
             id,
             lottery.owner,
+            _type,
             lottery.lotteryNumber,
             lottery.amount
         );
