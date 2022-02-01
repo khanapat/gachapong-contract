@@ -1,4 +1,4 @@
-//SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: MIT
 
 pragma solidity 0.8.7;
 
@@ -142,7 +142,7 @@ contract Gachapong is
 
         token.safeTransferFrom(msg.sender, wallet, _amount);
 
-        uint256 id = currentLotteryId;
+        uint256 id = ++currentLotteryId;
         Lottery storage lottery = lotteries[id];
         lottery.lotteryRound = currentLotteryRound;
         lottery.lotteryType = _type;
