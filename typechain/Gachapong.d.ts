@@ -23,17 +23,17 @@ interface GachapongInterface extends ethers.utils.Interface {
   functions: {
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
     "WORKER_ROLE()": FunctionFragment;
-    "addOnPoolReward()": FunctionFragment;
     "buyLottery(uint8,uint256,uint256)": FunctionFragment;
     "claimReward(uint256)": FunctionFragment;
     "closeRound(uint256,uint256)": FunctionFragment;
     "currentLotteryId()": FunctionFragment;
     "currentLotteryRound()": FunctionFragment;
     "generateRandom(uint256)": FunctionFragment;
+    "getLotteries(address,uint256)": FunctionFragment;
     "getRoleAdmin(bytes32)": FunctionFragment;
     "grantRole(bytes32,address)": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
-    "initialize(address,address,uint16,uint16,uint16)": FunctionFragment;
+    "initialize(address,address,uint16,uint16)": FunctionFragment;
     "lotteries(uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "pause()": FunctionFragment;
@@ -42,8 +42,8 @@ interface GachapongInterface extends ethers.utils.Interface {
     "renounceRole(bytes32,address)": FunctionFragment;
     "revokeRole(bytes32,address)": FunctionFragment;
     "rounds(uint256)": FunctionFragment;
-    "setAddOnPoolReward(uint16)": FunctionFragment;
     "setMultiplyReward(uint16,uint16)": FunctionFragment;
+    "setWallet(address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "threeDigitReward()": FunctionFragment;
     "token()": FunctionFragment;
@@ -61,10 +61,6 @@ interface GachapongInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "WORKER_ROLE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "addOnPoolReward",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -92,6 +88,10 @@ interface GachapongInterface extends ethers.utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "getLotteries",
+    values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getRoleAdmin",
     values: [BytesLike]
   ): string;
@@ -105,7 +105,7 @@ interface GachapongInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
-    values: [string, string, BigNumberish, BigNumberish, BigNumberish]
+    values: [string, string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "lotteries",
@@ -131,13 +131,10 @@ interface GachapongInterface extends ethers.utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "setAddOnPoolReward",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "setMultiplyReward",
     values: [BigNumberish, BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "setWallet", values: [string]): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [BytesLike]
@@ -174,10 +171,6 @@ interface GachapongInterface extends ethers.utils.Interface {
     functionFragment: "WORKER_ROLE",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "addOnPoolReward",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "buyLottery", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "claimReward",
@@ -194,6 +187,10 @@ interface GachapongInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "generateRandom",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getLotteries",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -218,13 +215,10 @@ interface GachapongInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "rounds", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "setAddOnPoolReward",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "setMultiplyReward",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setWallet", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
     data: BytesLike
@@ -383,8 +377,6 @@ export class Gachapong extends BaseContract {
 
     WORKER_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
-    addOnPoolReward(overrides?: CallOverrides): Promise<[number]>;
-
     buyLottery(
       _type: BigNumberish,
       _number: BigNumberish,
@@ -412,6 +404,12 @@ export class Gachapong extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    getLotteries(
+      _user: string,
+      _round: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber[]]>;
+
     getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<[string]>;
 
     grantRole(
@@ -431,7 +429,6 @@ export class Gachapong extends BaseContract {
       _token: string,
       _twoDigitReward: BigNumberish,
       _threeDigitReward: BigNumberish,
-      _addOnPoolReward: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -485,14 +482,14 @@ export class Gachapong extends BaseContract {
       }
     >;
 
-    setAddOnPoolReward(
-      _addOnPoolReward: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     setMultiplyReward(
       _twoDigitReward: BigNumberish,
       _threeDigitReward: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setWallet(
+      _wallet: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -535,8 +532,6 @@ export class Gachapong extends BaseContract {
 
   WORKER_ROLE(overrides?: CallOverrides): Promise<string>;
 
-  addOnPoolReward(overrides?: CallOverrides): Promise<number>;
-
   buyLottery(
     _type: BigNumberish,
     _number: BigNumberish,
@@ -564,6 +559,12 @@ export class Gachapong extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  getLotteries(
+    _user: string,
+    _round: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber[]>;
+
   getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
 
   grantRole(
@@ -583,7 +584,6 @@ export class Gachapong extends BaseContract {
     _token: string,
     _twoDigitReward: BigNumberish,
     _threeDigitReward: BigNumberish,
-    _addOnPoolReward: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -637,14 +637,14 @@ export class Gachapong extends BaseContract {
     }
   >;
 
-  setAddOnPoolReward(
-    _addOnPoolReward: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   setMultiplyReward(
     _twoDigitReward: BigNumberish,
     _threeDigitReward: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setWallet(
+    _wallet: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -687,8 +687,6 @@ export class Gachapong extends BaseContract {
 
     WORKER_ROLE(overrides?: CallOverrides): Promise<string>;
 
-    addOnPoolReward(overrides?: CallOverrides): Promise<number>;
-
     buyLottery(
       _type: BigNumberish,
       _number: BigNumberish,
@@ -716,6 +714,12 @@ export class Gachapong extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    getLotteries(
+      _user: string,
+      _round: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber[]>;
+
     getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
 
     grantRole(
@@ -735,7 +739,6 @@ export class Gachapong extends BaseContract {
       _token: string,
       _twoDigitReward: BigNumberish,
       _threeDigitReward: BigNumberish,
-      _addOnPoolReward: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -785,16 +788,13 @@ export class Gachapong extends BaseContract {
       }
     >;
 
-    setAddOnPoolReward(
-      _addOnPoolReward: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     setMultiplyReward(
       _twoDigitReward: BigNumberish,
       _threeDigitReward: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    setWallet(_wallet: string, overrides?: CallOverrides): Promise<void>;
 
     supportsInterface(
       interfaceId: BytesLike,
@@ -1012,8 +1012,6 @@ export class Gachapong extends BaseContract {
 
     WORKER_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
-    addOnPoolReward(overrides?: CallOverrides): Promise<BigNumber>;
-
     buyLottery(
       _type: BigNumberish,
       _number: BigNumberish,
@@ -1041,6 +1039,12 @@ export class Gachapong extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    getLotteries(
+      _user: string,
+      _round: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getRoleAdmin(
       role: BytesLike,
       overrides?: CallOverrides
@@ -1063,7 +1067,6 @@ export class Gachapong extends BaseContract {
       _token: string,
       _twoDigitReward: BigNumberish,
       _threeDigitReward: BigNumberish,
-      _addOnPoolReward: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1098,14 +1101,14 @@ export class Gachapong extends BaseContract {
 
     rounds(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
-    setAddOnPoolReward(
-      _addOnPoolReward: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     setMultiplyReward(
       _twoDigitReward: BigNumberish,
       _threeDigitReward: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setWallet(
+      _wallet: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1151,8 +1154,6 @@ export class Gachapong extends BaseContract {
 
     WORKER_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    addOnPoolReward(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     buyLottery(
       _type: BigNumberish,
       _number: BigNumberish,
@@ -1182,6 +1183,12 @@ export class Gachapong extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    getLotteries(
+      _user: string,
+      _round: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getRoleAdmin(
       role: BytesLike,
       overrides?: CallOverrides
@@ -1204,7 +1211,6 @@ export class Gachapong extends BaseContract {
       _token: string,
       _twoDigitReward: BigNumberish,
       _threeDigitReward: BigNumberish,
-      _addOnPoolReward: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1242,14 +1248,14 @@ export class Gachapong extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    setAddOnPoolReward(
-      _addOnPoolReward: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     setMultiplyReward(
       _twoDigitReward: BigNumberish,
       _threeDigitReward: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setWallet(
+      _wallet: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

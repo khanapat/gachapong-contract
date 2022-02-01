@@ -22,20 +22,53 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 interface JackpotInterface extends ethers.utils.Interface {
   functions: {
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
+    "GACHAPONG_ROLE()": FunctionFragment;
+    "addOnPoolReward()": FunctionFragment;
+    "addTicket(address,uint256)": FunctionFragment;
+    "currentJackpotId()": FunctionFragment;
+    "currentJackpotRound()": FunctionFragment;
     "getRoleAdmin(bytes32)": FunctionFragment;
     "grantRole(bytes32,address)": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
+    "initialize(address,address,uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "paused()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "renounceRole(bytes32,address)": FunctionFragment;
     "revokeRole(bytes32,address)": FunctionFragment;
+    "rounds(uint256)": FunctionFragment;
+    "setAddOnPoolReward(uint16)": FunctionFragment;
+    "setWallet(address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
+    "ticketPrice()": FunctionFragment;
+    "token()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
+    "userJackpot(uint256,address,uint256)": FunctionFragment;
+    "wallet()": FunctionFragment;
   };
 
   encodeFunctionData(
     functionFragment: "DEFAULT_ADMIN_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "GACHAPONG_ROLE",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "addOnPoolReward",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "addTicket",
+    values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "currentJackpotId",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "currentJackpotRound",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -49,6 +82,10 @@ interface JackpotInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "hasRole",
     values: [BytesLike, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "initialize",
+    values: [string, string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(functionFragment: "paused", values?: undefined): string;
@@ -65,16 +102,52 @@ interface JackpotInterface extends ethers.utils.Interface {
     values: [BytesLike, string]
   ): string;
   encodeFunctionData(
+    functionFragment: "rounds",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setAddOnPoolReward",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(functionFragment: "setWallet", values: [string]): string;
+  encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [BytesLike]
   ): string;
   encodeFunctionData(
+    functionFragment: "ticketPrice",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "token", values?: undefined): string;
+  encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [string]
   ): string;
+  encodeFunctionData(
+    functionFragment: "userJackpot",
+    values: [BigNumberish, string, BigNumberish]
+  ): string;
+  encodeFunctionData(functionFragment: "wallet", values?: undefined): string;
 
   decodeFunctionResult(
     functionFragment: "DEFAULT_ADMIN_ROLE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "GACHAPONG_ROLE",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "addOnPoolReward",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "addTicket", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "currentJackpotId",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "currentJackpotRound",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -83,6 +156,7 @@ interface JackpotInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
   decodeFunctionResult(
@@ -94,16 +168,33 @@ interface JackpotInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "rounds", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setAddOnPoolReward",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "setWallet", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "ticketPrice",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "token", data: BytesLike): Result;
+  decodeFunctionResult(
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "userJackpot",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "wallet", data: BytesLike): Result;
 
   events: {
+    "AddTicket(address,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Paused(address)": EventFragment;
     "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
@@ -112,6 +203,7 @@ interface JackpotInterface extends ethers.utils.Interface {
     "Unpaused(address)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "AddTicket"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleAdminChanged"): EventFragment;
@@ -119,6 +211,10 @@ interface JackpotInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "RoleRevoked"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
 }
+
+export type AddTicketEvent = TypedEvent<
+  [string, BigNumber] & { user: string; ticketId: BigNumber }
+>;
 
 export type OwnershipTransferredEvent = TypedEvent<
   [string, string] & { previousOwner: string; newOwner: string }
@@ -190,6 +286,20 @@ export class Jackpot extends BaseContract {
   functions: {
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
+    GACHAPONG_ROLE(overrides?: CallOverrides): Promise<[string]>;
+
+    addOnPoolReward(overrides?: CallOverrides): Promise<[number]>;
+
+    addTicket(
+      _user: string,
+      _betAmount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    currentJackpotId(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    currentJackpotRound(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<[string]>;
 
     grantRole(
@@ -203,6 +313,13 @@ export class Jackpot extends BaseContract {
       account: string,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
+
+    initialize(
+      _wallet: string,
+      _token: string,
+      _ticketPrice: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
@@ -224,18 +341,67 @@ export class Jackpot extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    rounds(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber, BigNumber, boolean] & {
+        ref: BigNumber;
+        winnerId: BigNumber;
+        reward: BigNumber;
+        isClaimable: boolean;
+      }
+    >;
+
+    setAddOnPoolReward(
+      _addOnPoolReward: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setWallet(
+      _wallet: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
+    ticketPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    token(overrides?: CallOverrides): Promise<[string]>;
+
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    userJackpot(
+      arg0: BigNumberish,
+      arg1: string,
+      arg2: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    wallet(overrides?: CallOverrides): Promise<[string]>;
   };
 
   DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
+
+  GACHAPONG_ROLE(overrides?: CallOverrides): Promise<string>;
+
+  addOnPoolReward(overrides?: CallOverrides): Promise<number>;
+
+  addTicket(
+    _user: string,
+    _betAmount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  currentJackpotId(overrides?: CallOverrides): Promise<BigNumber>;
+
+  currentJackpotRound(overrides?: CallOverrides): Promise<BigNumber>;
 
   getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
 
@@ -250,6 +416,13 @@ export class Jackpot extends BaseContract {
     account: string,
     overrides?: CallOverrides
   ): Promise<boolean>;
+
+  initialize(
+    _wallet: string,
+    _token: string,
+    _ticketPrice: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
@@ -271,18 +444,67 @@ export class Jackpot extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  rounds(
+    arg0: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<
+    [BigNumber, BigNumber, BigNumber, boolean] & {
+      ref: BigNumber;
+      winnerId: BigNumber;
+      reward: BigNumber;
+      isClaimable: boolean;
+    }
+  >;
+
+  setAddOnPoolReward(
+    _addOnPoolReward: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setWallet(
+    _wallet: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   supportsInterface(
     interfaceId: BytesLike,
     overrides?: CallOverrides
   ): Promise<boolean>;
+
+  ticketPrice(overrides?: CallOverrides): Promise<BigNumber>;
+
+  token(overrides?: CallOverrides): Promise<string>;
 
   transferOwnership(
     newOwner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  userJackpot(
+    arg0: BigNumberish,
+    arg1: string,
+    arg2: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  wallet(overrides?: CallOverrides): Promise<string>;
+
   callStatic: {
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
+
+    GACHAPONG_ROLE(overrides?: CallOverrides): Promise<string>;
+
+    addOnPoolReward(overrides?: CallOverrides): Promise<number>;
+
+    addTicket(
+      _user: string,
+      _betAmount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    currentJackpotId(overrides?: CallOverrides): Promise<BigNumber>;
+
+    currentJackpotRound(overrides?: CallOverrides): Promise<BigNumber>;
 
     getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
 
@@ -297,6 +519,13 @@ export class Jackpot extends BaseContract {
       account: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    initialize(
+      _wallet: string,
+      _token: string,
+      _ticketPrice: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -316,18 +545,66 @@ export class Jackpot extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    rounds(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber, BigNumber, boolean] & {
+        ref: BigNumber;
+        winnerId: BigNumber;
+        reward: BigNumber;
+        isClaimable: boolean;
+      }
+    >;
+
+    setAddOnPoolReward(
+      _addOnPoolReward: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setWallet(_wallet: string, overrides?: CallOverrides): Promise<void>;
+
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
+    ticketPrice(overrides?: CallOverrides): Promise<BigNumber>;
+
+    token(overrides?: CallOverrides): Promise<string>;
+
     transferOwnership(
       newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    userJackpot(
+      arg0: BigNumberish,
+      arg1: string,
+      arg2: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    wallet(overrides?: CallOverrides): Promise<string>;
   };
 
   filters: {
+    "AddTicket(address,uint256)"(
+      user?: null,
+      ticketId?: null
+    ): TypedEventFilter<
+      [string, BigNumber],
+      { user: string; ticketId: BigNumber }
+    >;
+
+    AddTicket(
+      user?: null,
+      ticketId?: null
+    ): TypedEventFilter<
+      [string, BigNumber],
+      { user: string; ticketId: BigNumber }
+    >;
+
     "OwnershipTransferred(address,address)"(
       previousOwner?: string | null,
       newOwner?: string | null
@@ -414,6 +691,20 @@ export class Jackpot extends BaseContract {
   estimateGas: {
     DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
+    GACHAPONG_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
+
+    addOnPoolReward(overrides?: CallOverrides): Promise<BigNumber>;
+
+    addTicket(
+      _user: string,
+      _betAmount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    currentJackpotId(overrides?: CallOverrides): Promise<BigNumber>;
+
+    currentJackpotRound(overrides?: CallOverrides): Promise<BigNumber>;
+
     getRoleAdmin(
       role: BytesLike,
       overrides?: CallOverrides
@@ -429,6 +720,13 @@ export class Jackpot extends BaseContract {
       role: BytesLike,
       account: string,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    initialize(
+      _wallet: string,
+      _token: string,
+      _ticketPrice: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
@@ -451,19 +749,60 @@ export class Jackpot extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    rounds(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    setAddOnPoolReward(
+      _addOnPoolReward: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setWallet(
+      _wallet: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    ticketPrice(overrides?: CallOverrides): Promise<BigNumber>;
+
+    token(overrides?: CallOverrides): Promise<BigNumber>;
+
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    userJackpot(
+      arg0: BigNumberish,
+      arg1: string,
+      arg2: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    wallet(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
     DEFAULT_ADMIN_ROLE(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    GACHAPONG_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    addOnPoolReward(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    addTicket(
+      _user: string,
+      _betAmount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    currentJackpotId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    currentJackpotRound(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -482,6 +821,13 @@ export class Jackpot extends BaseContract {
       role: BytesLike,
       account: string,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    initialize(
+      _wallet: string,
+      _token: string,
+      _ticketPrice: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -504,14 +850,42 @@ export class Jackpot extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    rounds(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    setAddOnPoolReward(
+      _addOnPoolReward: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setWallet(
+      _wallet: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    ticketPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    token(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    userJackpot(
+      arg0: BigNumberish,
+      arg1: string,
+      arg2: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    wallet(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

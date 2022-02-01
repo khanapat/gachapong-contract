@@ -10,14 +10,13 @@ use(solidity);
 const twoDigitType = 0;
 const threeDigitType = 1;
 
-const lotteryRound0 = 0;
-const lotteryRound1 = 1;
-const lotteryId0 = 0;
-const lotteryId1 = 1;
+const lotteryRound0 = BigNumber.from("0");
+const lotteryRound1 = BigNumber.from("1");
+const lotteryId0 = BigNumber.from("0");
+const lotteryId1 = BigNumber.from("1");
 
 const twoDigitReward = 500; // 5 times
 const threeDigitReward = 1200; // 12 times
-const addOnPool = 30; // 30%
 
 const buyLotteryEvent = "BuyLottery";
 const closeRoundEvent = "CloseRound";
@@ -78,8 +77,7 @@ describe("Gachapong", function () {
             wallet.address,
             token.address,
             twoDigitReward,
-            threeDigitReward,
-            addOnPool
+            threeDigitReward
         ])) as Gachapong;
         await gachapong.deployed();
 
@@ -118,7 +116,6 @@ describe("Gachapong", function () {
         it("Should set the right initial data", async function () {
             expect(await gachapong.twoDigitReward()).to.equal(twoDigitReward);
             expect(await gachapong.threeDigitReward()).to.equal(threeDigitReward);
-            expect(await gachapong.addOnPoolReward()).to.equal(addOnPool);
             expect(await gachapong.wallet()).to.equal(wallet.address);
         });
     });
@@ -150,26 +147,17 @@ describe("Gachapong", function () {
         });
     });
 
-    describe("SetAddOnPoolReward", function () {
-        it("Should be able to set addon pool reward", async function () {
-            const newAddOnPool = 40; // 40%
+    describe("SetWallet", function () {
+        it("Should be able to set wallet", async function () {
             await gachapong.connect(owner).pause();
-            await gachapong.connect(owner).setAddOnPoolReward(newAddOnPool);
-            expect(await gachapong.addOnPoolReward()).to.equal(newAddOnPool);
+            await gachapong.connect(owner).setWallet(addr1.address);
+            expect(await gachapong.wallet()).to.equal(addr1.address);
         });
 
-        it("Should be unable to set addon pool reward because of 0", async function () {
-            const newAddOnPool = 0; // 0%
+        it("Should be unable to set wallet because of address 0", async function () {
             await gachapong.connect(owner).pause();
-            await expect(gachapong.connect(owner).setAddOnPoolReward(newAddOnPool))
-                .to.be.revertedWith("Gachapong.sol: Must be > 0.");
-        });
-
-        it("Should be able to set addon pool reward because of not owner", async function () {
-            const newAddOnPool = 40; // 40%
-            await gachapong.connect(owner).pause();
-            await expect(gachapong.connect(addr1).setAddOnPoolReward(newAddOnPool))
-                .to.be.revertedWith("Ownable: caller is not the owner");
+            await expect(gachapong.connect(owner).setWallet(ethers.constants.AddressZero))
+                .to.be.revertedWith("Gachapong.sol: Must be address.");
         });
     });
 
@@ -191,6 +179,8 @@ describe("Gachapong", function () {
             expect(lottery.amount).to.equal(eth(100));
             expect(lottery.owner).to.equal(addr1.address);
 
+            expect((await gachapong.getLotteries(addr1.address, lotteryRound0)).length).to.equal(1);
+
             expect(await token.balanceOf(addr1.address)).to.equal(eth(900));
             expect(await token.balanceOf(wallet.address)).to.equal(eth(100));
         });
@@ -211,6 +201,8 @@ describe("Gachapong", function () {
             expect(lottery.lotteryNumber).to.equal(number);
             expect(lottery.amount).to.equal(eth(100));
             expect(lottery.owner).to.equal(addr1.address);
+
+            expect((await gachapong.getLotteries(addr1.address, lotteryRound0)).length).to.equal(1);
 
             expect(await token.balanceOf(addr1.address)).to.equal(eth(900));
             expect(await token.balanceOf(wallet.address)).to.equal(eth(100));
@@ -256,7 +248,7 @@ describe("Gachapong", function () {
         });
     });
 
-    describe.only("GenerateRandom", function () {
+    describe("GenerateRandom", function () {
         it("Should be able to generate random", async function () {
             const number = 99;
             await approveToken(addr1, eth(100));
@@ -270,7 +262,7 @@ describe("Gachapong", function () {
             await gachapong.connect(worker).generateRandom(lotteryRound0);
 
             const result: LotteryResult = await gachapong.rounds(lotteryRound0);
-            console.log(result);
+            // console.log(result);
             expect(result.twoDigitRef).to.equal(currentBlockNumber + 2);
             expect(result.threeDigitRef).to.equal(currentBlockNumber + 3);
             expect(result.isClaimable).to.equal(true);

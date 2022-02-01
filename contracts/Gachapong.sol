@@ -42,7 +42,6 @@ contract Gachapong is
 
     uint16 public twoDigitReward;
     uint16 public threeDigitReward;
-    uint16 public addOnPoolReward;
     uint256 public currentLotteryRound;
     uint256 public currentLotteryId;
 
@@ -88,8 +87,7 @@ contract Gachapong is
         address _wallet,
         address _token,
         uint16 _twoDigitReward,
-        uint16 _threeDigitReward,
-        uint16 _addOnPoolReward
+        uint16 _threeDigitReward
     ) public initializer {
         OwnableUpgradeable.__Ownable_init();
         AccessControlUpgradeable.__AccessControl_init();
@@ -102,7 +100,6 @@ contract Gachapong is
         wallet = _wallet;
         twoDigitReward = _twoDigitReward;
         threeDigitReward = _threeDigitReward;
-        addOnPoolReward = _addOnPoolReward;
     }
 
     function setMultiplyReward(uint16 _twoDigitReward, uint16 _threeDigitReward)
@@ -116,15 +113,6 @@ contract Gachapong is
         );
         twoDigitReward = _twoDigitReward;
         threeDigitReward = _threeDigitReward;
-    }
-
-    function setAddOnPoolReward(uint16 _addOnPoolReward)
-        external
-        onlyOwner
-        whenPaused
-    {
-        require(_addOnPoolReward != 0, "Gachapong.sol: Must be > 0.");
-        addOnPoolReward = _addOnPoolReward;
     }
 
     function setWallet(address _wallet) external onlyOwner whenPaused {
@@ -147,7 +135,7 @@ contract Gachapong is
 
         token.safeTransferFrom(msg.sender, wallet, _amount);
 
-        uint256 id = ++currentLotteryId;
+        uint256 id = currentLotteryId++;
         Lottery storage lottery = lotteries[id];
         lottery.lotteryRound = currentLotteryRound;
         lottery.lotteryType = _type;
@@ -155,7 +143,7 @@ contract Gachapong is
         lottery.amount = _amount;
         lottery.owner = msg.sender;
 
-        currentLotteryId++;
+        userLotteries[msg.sender][currentLotteryRound].push(id);
 
         emit BuyLottery(
             lottery.lotteryRound,
@@ -178,12 +166,10 @@ contract Gachapong is
             "Gachapong.sol: Invalid ref."
         );
 
-        uint256 round = currentLotteryRound;
+        uint256 round = currentLotteryRound++;
         LotteryResult storage result = rounds[round];
         result.twoDigitRef = _twoDigitRef;
         result.threeDigitRef = _threeDigitRef;
-
-        currentLotteryRound++;
 
         emit CloseRound(round, result.twoDigitRef, result.threeDigitRef);
     }
@@ -279,6 +265,14 @@ contract Gachapong is
             }
             return 0;
         }
+    }
+
+    function getLotteries(address _user, uint256 _round)
+        external
+        view
+        returns (uint256[] memory)
+    {
+        return userLotteries[_user][_round];
     }
 
     function pause() external onlyOwner {
