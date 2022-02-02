@@ -14,6 +14,7 @@ export type { IERC20 } from "./IERC20";
 export type { Gachapong } from "./Gachapong";
 export type { Jackpot } from "./Jackpot";
 export type { StableCoin } from "./StableCoin";
+export type { IJackpot } from "./IJackpot";
 
 export { AccessControlUpgradeable__factory } from "./factories/AccessControlUpgradeable__factory";
 export { IAccessControlUpgradeable__factory } from "./factories/IAccessControlUpgradeable__factory";
@@ -28,3 +29,4 @@ export { IERC20__factory } from "./factories/IERC20__factory";
 export { Gachapong__factory } from "./factories/Gachapong__factory";
 export { Jackpot__factory } from "./factories/Jackpot__factory";
 export { StableCoin__factory } from "./factories/StableCoin__factory";
+export { IJackpot__factory } from "./factories/IJackpot__factory";

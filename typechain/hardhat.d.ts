@@ -64,6 +64,10 @@ declare module "hardhat/types/runtime" {
       name: "StableCoin",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.StableCoin__factory>;
+    getContractFactory(
+      name: "IJackpot",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IJackpot__factory>;
 
     getContractAt(
       name: "AccessControlUpgradeable",
@@ -130,6 +134,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.StableCoin>;
+    getContractAt(
+      name: "IJackpot",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IJackpot>;
 
     // default types
     getContractFactory(

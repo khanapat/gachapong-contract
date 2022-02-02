@@ -29,7 +29,6 @@ contract Jackpot is
 
     uint16 public addOnPoolReward;
     uint256 public currentJackpotRound;
-    // uint256 public currentJackpotId;
     uint256 public ticketPrice;
 
     address public wallet;
@@ -74,12 +73,12 @@ contract Jackpot is
         onlyOwner
         whenPaused
     {
-        require(_addOnPoolReward != 0, "Gachapong.sol: Must be > 0.");
+        require(_addOnPoolReward != 0, "Jackpot.sol: Must be > 0.");
         addOnPoolReward = _addOnPoolReward;
     }
 
     function setWallet(address _wallet) external onlyOwner whenPaused {
-        require(_wallet != address(0), "Gachapong.sol: Must be address.");
+        require(_wallet != address(0), "Jackpot.sol: Must be address.");
         wallet = _wallet;
     }
 

@@ -9,6 +9,7 @@ import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
+import "./utils/IJackpot.sol";
 
 contract Gachapong is
     Initializable,
@@ -49,6 +50,7 @@ contract Gachapong is
 
     bytes32 public constant WORKER_ROLE = keccak256("WORKER_ROLE");
 
+    IJackpot public jackpot;
     IERC20Upgradeable public token;
 
     mapping(uint256 => Lottery) public lotteries;
@@ -86,6 +88,7 @@ contract Gachapong is
     function initialize(
         address _wallet,
         address _token,
+        address _jackpot,
         uint16 _twoDigitReward,
         uint16 _threeDigitReward
     ) public initializer {
@@ -97,6 +100,7 @@ contract Gachapong is
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
 
         token = IERC20Upgradeable(_token);
+        jackpot = IJackpot(_jackpot);
         wallet = _wallet;
         twoDigitReward = _twoDigitReward;
         threeDigitReward = _threeDigitReward;
@@ -144,6 +148,8 @@ contract Gachapong is
         lottery.owner = msg.sender;
 
         userLotteries[msg.sender][currentLotteryRound].push(id);
+
+        jackpot.addTicket(msg.sender, _amount);
 
         emit BuyLottery(
             lottery.lotteryRound,

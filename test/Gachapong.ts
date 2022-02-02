@@ -3,9 +3,12 @@ import { expect, use } from "chai";
 import { solidity } from "ethereum-waffle";
 import { ethers, upgrades, network } from "hardhat";
 import { BigNumber } from "ethers";
-import { Gachapong, Gachapong__factory, StableCoin, StableCoin__factory } from "../typechain";
+import { Gachapong, Gachapong__factory, Jackpot, Jackpot__factory, StableCoin, StableCoin__factory } from "../typechain";
 
 use(solidity);
+
+const ticketPrice = ethers.utils.parseEther("100");
+const addOnPool = 30; // 30%
 
 const twoDigitType = 0;
 const threeDigitType = 1;
@@ -42,6 +45,8 @@ describe("Gachapong", function () {
     let token: StableCoin;
     let Gachapong: Gachapong__factory;
     let gachapong: Gachapong;
+    let Jackpot: Jackpot__factory;
+    let jackpot: Jackpot;
     let owner: SignerWithAddress;
     let worker: SignerWithAddress;
     let wallet: SignerWithAddress;
@@ -63,6 +68,7 @@ describe("Gachapong", function () {
         [owner, worker, wallet, addr1, addr2, addr3, ...addrs] = await ethers.getSigners();
 
         Token = await ethers.getContractFactory("StableCoin", owner);
+        Jackpot = await ethers.getContractFactory("Jackpot", owner);
         Gachapong = await ethers.getContractFactory("Gachapong", owner);
     });
 
@@ -73,9 +79,18 @@ describe("Gachapong", function () {
         )) as StableCoin;
         await token.deployed();
 
+        jackpot = (await upgrades.deployProxy(Jackpot, [
+            wallet.address,
+            token.address,
+            ticketPrice,
+            addOnPool
+        ])) as Jackpot;
+        await jackpot.deployed();
+
         gachapong = (await upgrades.deployProxy(Gachapong, [
             wallet.address,
             token.address,
+            jackpot.address,
             twoDigitReward,
             threeDigitReward
         ])) as Gachapong;
@@ -97,6 +112,10 @@ describe("Gachapong", function () {
         // add worker role
         const workerRole = await gachapong.WORKER_ROLE();
         await gachapong.connect(owner).grantRole(workerRole, worker.address);
+
+        // add gachapong role
+        const gachapongRole = await jackpot.GACHAPONG_ROLE();
+        await jackpot.connect(owner).grantRole(gachapongRole, gachapong.address);
     });
 
     describe("Initialize", function () {

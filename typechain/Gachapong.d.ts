@@ -33,7 +33,8 @@ interface GachapongInterface extends ethers.utils.Interface {
     "getRoleAdmin(bytes32)": FunctionFragment;
     "grantRole(bytes32,address)": FunctionFragment;
     "hasRole(bytes32,address)": FunctionFragment;
-    "initialize(address,address,uint16,uint16)": FunctionFragment;
+    "initialize(address,address,address,uint16,uint16)": FunctionFragment;
+    "jackpot()": FunctionFragment;
     "lotteries(uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "pause()": FunctionFragment;
@@ -105,8 +106,9 @@ interface GachapongInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
-    values: [string, string, BigNumberish, BigNumberish]
+    values: [string, string, string, BigNumberish, BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "jackpot", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "lotteries",
     values: [BigNumberish]
@@ -200,6 +202,7 @@ interface GachapongInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "jackpot", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "lotteries", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "pause", data: BytesLike): Result;
@@ -427,10 +430,13 @@ export class Gachapong extends BaseContract {
     initialize(
       _wallet: string,
       _token: string,
+      _jackpot: string,
       _twoDigitReward: BigNumberish,
       _threeDigitReward: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    jackpot(overrides?: CallOverrides): Promise<[string]>;
 
     lotteries(
       arg0: BigNumberish,
@@ -582,10 +588,13 @@ export class Gachapong extends BaseContract {
   initialize(
     _wallet: string,
     _token: string,
+    _jackpot: string,
     _twoDigitReward: BigNumberish,
     _threeDigitReward: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  jackpot(overrides?: CallOverrides): Promise<string>;
 
   lotteries(
     arg0: BigNumberish,
@@ -737,10 +746,13 @@ export class Gachapong extends BaseContract {
     initialize(
       _wallet: string,
       _token: string,
+      _jackpot: string,
       _twoDigitReward: BigNumberish,
       _threeDigitReward: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    jackpot(overrides?: CallOverrides): Promise<string>;
 
     lotteries(
       arg0: BigNumberish,
@@ -1065,10 +1077,13 @@ export class Gachapong extends BaseContract {
     initialize(
       _wallet: string,
       _token: string,
+      _jackpot: string,
       _twoDigitReward: BigNumberish,
       _threeDigitReward: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    jackpot(overrides?: CallOverrides): Promise<BigNumber>;
 
     lotteries(
       arg0: BigNumberish,
@@ -1209,10 +1224,13 @@ export class Gachapong extends BaseContract {
     initialize(
       _wallet: string,
       _token: string,
+      _jackpot: string,
       _twoDigitReward: BigNumberish,
       _threeDigitReward: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    jackpot(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     lotteries(
       arg0: BigNumberish,
