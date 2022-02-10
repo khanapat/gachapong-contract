@@ -11,7 +11,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
     const gachapong = await deploy("Gachapong", {
         from: deployer,
-        args: [],
+        args: [""],
         log: true
     });
 
