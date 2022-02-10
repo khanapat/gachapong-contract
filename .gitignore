@@ -3,6 +3,7 @@ node_modules
 .vscode
 .idea
 .deps
+.openzeppelin
 coverage
 coverage.json
 
