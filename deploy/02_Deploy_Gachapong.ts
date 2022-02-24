@@ -3,15 +3,32 @@ import { DeployFunction } from "hardhat-deploy/types";
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     const { deployer } = await hre.getNamedAccounts();
-    const { deploy, log } = hre.deployments;
+    const { deploy, log, get } = hre.deployments;
     const chainId = await hre.getChainId();
 
     log("Deploying the contracts with the account: ", deployer);
     log("Account Balance: ", (await hre.ethers.provider.getBalance(deployer)).toString());
 
+    const token = await get("StableCoin");
+    const jackpot = await get("Jackpot");
+
     const gachapong = await deploy("Gachapong", {
         from: deployer,
-        args: [""],
+        proxy: {
+            proxyContract: "OpenZeppelinTransparentProxy",
+            execute: {
+                init: {
+                    methodName: "initialize",
+                    args: [
+                        deployer,
+                        token.address,
+                        jackpot.address,
+                        500, // 5 times
+                        1200 // 12 times
+                    ],
+                }
+            }
+        },
         log: true
     });
 

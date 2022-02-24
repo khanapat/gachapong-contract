@@ -6,6 +6,7 @@ node_modules
 .openzeppelin
 coverage
 coverage.json
+deployments
 
 #Hardhat files
 cache
