@@ -41,6 +41,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC165Upgradeable__factory>;
     getContractFactory(
+      name: "Ownable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Ownable__factory>;
+    getContractFactory(
       name: "ERC20",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ERC20__factory>;
@@ -53,6 +57,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC20__factory>;
     getContractFactory(
+      name: "CurrencyManager",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.CurrencyManager__factory>;
+    getContractFactory(
       name: "Gachapong",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Gachapong__factory>;
@@ -64,6 +72,10 @@ declare module "hardhat/types/runtime" {
       name: "StableCoin",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.StableCoin__factory>;
+    getContractFactory(
+      name: "ICurrencyManager",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ICurrencyManager__factory>;
     getContractFactory(
       name: "IJackpot",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -105,6 +117,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IERC165Upgradeable>;
     getContractAt(
+      name: "Ownable",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Ownable>;
+    getContractAt(
       name: "ERC20",
       address: string,
       signer?: ethers.Signer
@@ -120,6 +137,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IERC20>;
     getContractAt(
+      name: "CurrencyManager",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.CurrencyManager>;
+    getContractAt(
       name: "Gachapong",
       address: string,
       signer?: ethers.Signer
@@ -134,6 +156,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.StableCoin>;
+    getContractAt(
+      name: "ICurrencyManager",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ICurrencyManager>;
     getContractAt(
       name: "IJackpot",
       address: string,
