@@ -5,7 +5,6 @@ pragma solidity 0.8.7;
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
@@ -15,7 +14,6 @@ contract Gachapong is
     Initializable,
     AccessControlUpgradeable,
     OwnableUpgradeable,
-    ReentrancyGuardUpgradeable,
     PausableUpgradeable
 {
     using SafeERC20Upgradeable for IERC20Upgradeable;
@@ -94,7 +92,6 @@ contract Gachapong is
     ) public initializer {
         OwnableUpgradeable.__Ownable_init();
         AccessControlUpgradeable.__AccessControl_init();
-        ReentrancyGuardUpgradeable.__ReentrancyGuard_init();
         PausableUpgradeable.__Pausable_init();
 
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
@@ -128,7 +125,7 @@ contract Gachapong is
         LotteryType _type,
         uint256 _number,
         uint256 _amount
-    ) external nonReentrant whenNotPaused {
+    ) external whenNotPaused {
         require(_amount != 0, "Gachapong.sol: Minimum bet.");
 
         if (_type == LotteryType.TwoDigit) {
@@ -218,7 +215,7 @@ contract Gachapong is
         threeDigitRandom = uint16(uint256(blockhash(_threeDigitRef)) % 1000);
     }
 
-    function claimReward(uint256 _lotteryId) external nonReentrant {
+    function claimReward(uint256 _lotteryId) external {
         require(
             rounds[_lotteryId].isClaimable,
             "Gachapong.sol: Not claimable."
