@@ -52,7 +52,7 @@ describe("CurrencyManager", function () {
             expect(lists1[1]).to.equal(0);
             // expect(await currencyManager.viewWhitelistedCurrencies(0, 0)).to.equal([[], BigNumber.from(0)]);
 
-            await expect(currencyManager.addCurrency(token1.address))
+            await expect(currencyManager.connect(owner).addCurrency(token1.address))
                 .to.emit(currencyManager, currencyWhitelistedEvent)
                 .withArgs(token1.address);
             expect(await currencyManager.isCurrencyWhitelisted(token1.address)).to.equal(true);
@@ -64,14 +64,20 @@ describe("CurrencyManager", function () {
             expect(lists2[1]).to.equal(1);
         });
 
+        it("Add duplicate currency", async function () {
+            await currencyManager.connect(owner).addCurrency(token1.address);
+            await expect(currencyManager.connect(owner).addCurrency(token1.address))
+                .to.be.revertedWith("Currency: Already whitelisted.");
+        });
+
         it("Remove currency", async function () {
-            await currencyManager.addCurrency(token1.address);
-            await currencyManager.addCurrency(token2.address);
+            await currencyManager.connect(owner).addCurrency(token1.address);
+            await currencyManager.connect(owner).addCurrency(token2.address);
             expect(await currencyManager.isCurrencyWhitelisted(token1.address)).to.equal(true);
             expect(await currencyManager.isCurrencyWhitelisted(token2.address)).to.equal(true);
             expect(await currencyManager.viewCountWhitelistedCurrencies()).to.equal(2);
 
-            await expect(currencyManager.removeCurrency(token1.address))
+            await expect(currencyManager.connect(owner).removeCurrency(token1.address))
                 .to.emit(currencyManager, currencyRemovedEvent)
                 .withArgs(token1.address);
             expect(await currencyManager.isCurrencyWhitelisted(token1.address)).to.equal(false);
@@ -81,6 +87,11 @@ describe("CurrencyManager", function () {
             expect(lists[0].length).to.equal(1);
             expect(lists[0][0]).to.equal(token2.address);
             expect(lists[1]).to.equal(1);
+        });
+
+        it("Remove non-exist currency", async function () {
+            await expect(currencyManager.connect(owner).removeCurrency(token1.address))
+                .to.be.revertedWith("Currency: Not whitelisted.");
         });
     });
 });

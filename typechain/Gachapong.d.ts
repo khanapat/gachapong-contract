@@ -23,9 +23,10 @@ interface GachapongInterface extends ethers.utils.Interface {
   functions: {
     "DEFAULT_ADMIN_ROLE()": FunctionFragment;
     "WORKER_ROLE()": FunctionFragment;
-    "buyLottery(uint8,uint256,uint256)": FunctionFragment;
+    "buyLottery(address,uint8,uint256,uint256)": FunctionFragment;
     "claimReward(uint256)": FunctionFragment;
     "closeRound(uint256,uint256)": FunctionFragment;
+    "currencyManager()": FunctionFragment;
     "currentLotteryId()": FunctionFragment;
     "currentLotteryRound()": FunctionFragment;
     "generateRandom(uint256)": FunctionFragment;
@@ -47,10 +48,10 @@ interface GachapongInterface extends ethers.utils.Interface {
     "setWallet(address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "threeDigitReward()": FunctionFragment;
-    "token()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "twoDigitReward()": FunctionFragment;
     "unpause()": FunctionFragment;
+    "updateCurrencyManager(address)": FunctionFragment;
     "userLotteries(address,uint256,uint256)": FunctionFragment;
     "viewReward(uint256)": FunctionFragment;
     "wallet()": FunctionFragment;
@@ -66,7 +67,7 @@ interface GachapongInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "buyLottery",
-    values: [BigNumberish, BigNumberish, BigNumberish]
+    values: [string, BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "claimReward",
@@ -75,6 +76,10 @@ interface GachapongInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "closeRound",
     values: [BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "currencyManager",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "currentLotteryId",
@@ -145,7 +150,6 @@ interface GachapongInterface extends ethers.utils.Interface {
     functionFragment: "threeDigitReward",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "token", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [string]
@@ -155,6 +159,10 @@ interface GachapongInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "unpause", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "updateCurrencyManager",
+    values: [string]
+  ): string;
   encodeFunctionData(
     functionFragment: "userLotteries",
     values: [string, BigNumberish, BigNumberish]
@@ -179,6 +187,10 @@ interface GachapongInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "closeRound", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "currencyManager",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "currentLotteryId",
     data: BytesLike
@@ -230,7 +242,6 @@ interface GachapongInterface extends ethers.utils.Interface {
     functionFragment: "threeDigitReward",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "token", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
     data: BytesLike
@@ -241,6 +252,10 @@ interface GachapongInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "unpause", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "updateCurrencyManager",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "userLotteries",
     data: BytesLike
   ): Result;
@@ -248,10 +263,11 @@ interface GachapongInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "wallet", data: BytesLike): Result;
 
   events: {
-    "BuyLottery(uint256,uint256,address,uint8,uint256,uint256)": EventFragment;
-    "ClaimReward(uint256,uint256,address,uint256)": EventFragment;
+    "BuyLottery(uint256,uint256,address,uint8,uint256,uint256,address)": EventFragment;
+    "ClaimReward(uint256,uint256,address,uint256,address)": EventFragment;
     "CloseRound(uint256,uint256,uint256)": EventFragment;
     "GenerateRandom(uint256,uint16,uint16)": EventFragment;
+    "NewCurrencyManager(address)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Paused(address)": EventFragment;
     "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
@@ -264,6 +280,7 @@ interface GachapongInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "ClaimReward"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "CloseRound"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "GenerateRandom"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "NewCurrencyManager"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RoleAdminChanged"): EventFragment;
@@ -273,22 +290,24 @@ interface GachapongInterface extends ethers.utils.Interface {
 }
 
 export type BuyLotteryEvent = TypedEvent<
-  [BigNumber, BigNumber, string, number, BigNumber, BigNumber] & {
+  [BigNumber, BigNumber, string, number, BigNumber, BigNumber, string] & {
     round: BigNumber;
     id: BigNumber;
     buyer: string;
     lotteryType: number;
     number: BigNumber;
     amount: BigNumber;
+    currency: string;
   }
 >;
 
 export type ClaimRewardEvent = TypedEvent<
-  [BigNumber, BigNumber, string, BigNumber] & {
+  [BigNumber, BigNumber, string, BigNumber, string] & {
     round: BigNumber;
     id: BigNumber;
     owner: string;
     reward: BigNumber;
+    currency: string;
   }
 >;
 
@@ -306,6 +325,10 @@ export type GenerateRandomEvent = TypedEvent<
     twoDigitRandom: number;
     threeDigitRandom: number;
   }
+>;
+
+export type NewCurrencyManagerEvent = TypedEvent<
+  [string] & { currencyManager: string }
 >;
 
 export type OwnershipTransferredEvent = TypedEvent<
@@ -381,6 +404,7 @@ export class Gachapong extends BaseContract {
     WORKER_ROLE(overrides?: CallOverrides): Promise<[string]>;
 
     buyLottery(
+      _currency: string,
       _type: BigNumberish,
       _number: BigNumberish,
       _amount: BigNumberish,
@@ -397,6 +421,8 @@ export class Gachapong extends BaseContract {
       _threeDigitRef: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    currencyManager(overrides?: CallOverrides): Promise<[string]>;
 
     currentLotteryId(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -429,7 +455,7 @@ export class Gachapong extends BaseContract {
 
     initialize(
       _wallet: string,
-      _token: string,
+      _currencyManager: string,
       _jackpot: string,
       _twoDigitReward: BigNumberish,
       _threeDigitReward: BigNumberish,
@@ -442,11 +468,12 @@ export class Gachapong extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, number, BigNumber, BigNumber, string] & {
+      [BigNumber, number, BigNumber, BigNumber, string, string] & {
         lotteryRound: BigNumber;
         lotteryType: number;
         lotteryNumber: BigNumber;
         amount: BigNumber;
+        currency: string;
         owner: string;
       }
     >;
@@ -506,8 +533,6 @@ export class Gachapong extends BaseContract {
 
     threeDigitReward(overrides?: CallOverrides): Promise<[number]>;
 
-    token(overrides?: CallOverrides): Promise<[string]>;
-
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -516,6 +541,11 @@ export class Gachapong extends BaseContract {
     twoDigitReward(overrides?: CallOverrides): Promise<[number]>;
 
     unpause(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    updateCurrencyManager(
+      _currencyManager: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -539,6 +569,7 @@ export class Gachapong extends BaseContract {
   WORKER_ROLE(overrides?: CallOverrides): Promise<string>;
 
   buyLottery(
+    _currency: string,
     _type: BigNumberish,
     _number: BigNumberish,
     _amount: BigNumberish,
@@ -555,6 +586,8 @@ export class Gachapong extends BaseContract {
     _threeDigitRef: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  currencyManager(overrides?: CallOverrides): Promise<string>;
 
   currentLotteryId(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -587,7 +620,7 @@ export class Gachapong extends BaseContract {
 
   initialize(
     _wallet: string,
-    _token: string,
+    _currencyManager: string,
     _jackpot: string,
     _twoDigitReward: BigNumberish,
     _threeDigitReward: BigNumberish,
@@ -600,11 +633,12 @@ export class Gachapong extends BaseContract {
     arg0: BigNumberish,
     overrides?: CallOverrides
   ): Promise<
-    [BigNumber, number, BigNumber, BigNumber, string] & {
+    [BigNumber, number, BigNumber, BigNumber, string, string] & {
       lotteryRound: BigNumber;
       lotteryType: number;
       lotteryNumber: BigNumber;
       amount: BigNumber;
+      currency: string;
       owner: string;
     }
   >;
@@ -664,8 +698,6 @@ export class Gachapong extends BaseContract {
 
   threeDigitReward(overrides?: CallOverrides): Promise<number>;
 
-  token(overrides?: CallOverrides): Promise<string>;
-
   transferOwnership(
     newOwner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -674,6 +706,11 @@ export class Gachapong extends BaseContract {
   twoDigitReward(overrides?: CallOverrides): Promise<number>;
 
   unpause(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  updateCurrencyManager(
+    _currencyManager: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -697,6 +734,7 @@ export class Gachapong extends BaseContract {
     WORKER_ROLE(overrides?: CallOverrides): Promise<string>;
 
     buyLottery(
+      _currency: string,
       _type: BigNumberish,
       _number: BigNumberish,
       _amount: BigNumberish,
@@ -713,6 +751,8 @@ export class Gachapong extends BaseContract {
       _threeDigitRef: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    currencyManager(overrides?: CallOverrides): Promise<string>;
 
     currentLotteryId(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -745,7 +785,7 @@ export class Gachapong extends BaseContract {
 
     initialize(
       _wallet: string,
-      _token: string,
+      _currencyManager: string,
       _jackpot: string,
       _twoDigitReward: BigNumberish,
       _threeDigitReward: BigNumberish,
@@ -758,11 +798,12 @@ export class Gachapong extends BaseContract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
-      [BigNumber, number, BigNumber, BigNumber, string] & {
+      [BigNumber, number, BigNumber, BigNumber, string, string] & {
         lotteryRound: BigNumber;
         lotteryType: number;
         lotteryNumber: BigNumber;
         amount: BigNumber;
+        currency: string;
         owner: string;
       }
     >;
@@ -815,8 +856,6 @@ export class Gachapong extends BaseContract {
 
     threeDigitReward(overrides?: CallOverrides): Promise<number>;
 
-    token(overrides?: CallOverrides): Promise<string>;
-
     transferOwnership(
       newOwner: string,
       overrides?: CallOverrides
@@ -825,6 +864,11 @@ export class Gachapong extends BaseContract {
     twoDigitReward(overrides?: CallOverrides): Promise<number>;
 
     unpause(overrides?: CallOverrides): Promise<void>;
+
+    updateCurrencyManager(
+      _currencyManager: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     userLotteries(
       arg0: string,
@@ -842,15 +886,16 @@ export class Gachapong extends BaseContract {
   };
 
   filters: {
-    "BuyLottery(uint256,uint256,address,uint8,uint256,uint256)"(
+    "BuyLottery(uint256,uint256,address,uint8,uint256,uint256,address)"(
       round?: BigNumberish | null,
       id?: BigNumberish | null,
       buyer?: null,
       lotteryType?: null,
       number?: null,
-      amount?: null
+      amount?: null,
+      currency?: null
     ): TypedEventFilter<
-      [BigNumber, BigNumber, string, number, BigNumber, BigNumber],
+      [BigNumber, BigNumber, string, number, BigNumber, BigNumber, string],
       {
         round: BigNumber;
         id: BigNumber;
@@ -858,6 +903,7 @@ export class Gachapong extends BaseContract {
         lotteryType: number;
         number: BigNumber;
         amount: BigNumber;
+        currency: string;
       }
     >;
 
@@ -867,9 +913,10 @@ export class Gachapong extends BaseContract {
       buyer?: null,
       lotteryType?: null,
       number?: null,
-      amount?: null
+      amount?: null,
+      currency?: null
     ): TypedEventFilter<
-      [BigNumber, BigNumber, string, number, BigNumber, BigNumber],
+      [BigNumber, BigNumber, string, number, BigNumber, BigNumber, string],
       {
         round: BigNumber;
         id: BigNumber;
@@ -877,27 +924,42 @@ export class Gachapong extends BaseContract {
         lotteryType: number;
         number: BigNumber;
         amount: BigNumber;
+        currency: string;
       }
     >;
 
-    "ClaimReward(uint256,uint256,address,uint256)"(
+    "ClaimReward(uint256,uint256,address,uint256,address)"(
       round?: BigNumberish | null,
       id?: BigNumberish | null,
       owner?: null,
-      reward?: null
+      reward?: null,
+      currency?: null
     ): TypedEventFilter<
-      [BigNumber, BigNumber, string, BigNumber],
-      { round: BigNumber; id: BigNumber; owner: string; reward: BigNumber }
+      [BigNumber, BigNumber, string, BigNumber, string],
+      {
+        round: BigNumber;
+        id: BigNumber;
+        owner: string;
+        reward: BigNumber;
+        currency: string;
+      }
     >;
 
     ClaimReward(
       round?: BigNumberish | null,
       id?: BigNumberish | null,
       owner?: null,
-      reward?: null
+      reward?: null,
+      currency?: null
     ): TypedEventFilter<
-      [BigNumber, BigNumber, string, BigNumber],
-      { round: BigNumber; id: BigNumber; owner: string; reward: BigNumber }
+      [BigNumber, BigNumber, string, BigNumber, string],
+      {
+        round: BigNumber;
+        id: BigNumber;
+        owner: string;
+        reward: BigNumber;
+        currency: string;
+      }
     >;
 
     "CloseRound(uint256,uint256,uint256)"(
@@ -935,6 +997,14 @@ export class Gachapong extends BaseContract {
       [BigNumber, number, number],
       { round: BigNumber; twoDigitRandom: number; threeDigitRandom: number }
     >;
+
+    "NewCurrencyManager(address)"(
+      currencyManager?: string | null
+    ): TypedEventFilter<[string], { currencyManager: string }>;
+
+    NewCurrencyManager(
+      currencyManager?: string | null
+    ): TypedEventFilter<[string], { currencyManager: string }>;
 
     "OwnershipTransferred(address,address)"(
       previousOwner?: string | null,
@@ -1025,6 +1095,7 @@ export class Gachapong extends BaseContract {
     WORKER_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
 
     buyLottery(
+      _currency: string,
       _type: BigNumberish,
       _number: BigNumberish,
       _amount: BigNumberish,
@@ -1041,6 +1112,8 @@ export class Gachapong extends BaseContract {
       _threeDigitRef: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    currencyManager(overrides?: CallOverrides): Promise<BigNumber>;
 
     currentLotteryId(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1076,7 +1149,7 @@ export class Gachapong extends BaseContract {
 
     initialize(
       _wallet: string,
-      _token: string,
+      _currencyManager: string,
       _jackpot: string,
       _twoDigitReward: BigNumberish,
       _threeDigitReward: BigNumberish,
@@ -1134,8 +1207,6 @@ export class Gachapong extends BaseContract {
 
     threeDigitReward(overrides?: CallOverrides): Promise<BigNumber>;
 
-    token(overrides?: CallOverrides): Promise<BigNumber>;
-
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1144,6 +1215,11 @@ export class Gachapong extends BaseContract {
     twoDigitReward(overrides?: CallOverrides): Promise<BigNumber>;
 
     unpause(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    updateCurrencyManager(
+      _currencyManager: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1170,6 +1246,7 @@ export class Gachapong extends BaseContract {
     WORKER_ROLE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     buyLottery(
+      _currency: string,
       _type: BigNumberish,
       _number: BigNumberish,
       _amount: BigNumberish,
@@ -1186,6 +1263,8 @@ export class Gachapong extends BaseContract {
       _threeDigitRef: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    currencyManager(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     currentLotteryId(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1223,7 +1302,7 @@ export class Gachapong extends BaseContract {
 
     initialize(
       _wallet: string,
-      _token: string,
+      _currencyManager: string,
       _jackpot: string,
       _twoDigitReward: BigNumberish,
       _threeDigitReward: BigNumberish,
@@ -1284,8 +1363,6 @@ export class Gachapong extends BaseContract {
 
     threeDigitReward(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    token(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1294,6 +1371,11 @@ export class Gachapong extends BaseContract {
     twoDigitReward(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     unpause(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateCurrencyManager(
+      _currencyManager: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
