@@ -65,6 +65,11 @@ contract Jackpot is
         addOnPoolReward = _addOnRewardPool;
     }
 
+    function setToken(address _token) external onlyOwner whenPaused {
+        require(_token != address(0), "Jackpot.sol: Must be address.");
+        token = IERC20Upgradeable(_token);
+    }
+
     function setAddOnPoolReward(uint16 _addOnPoolReward)
         external
         onlyOwner

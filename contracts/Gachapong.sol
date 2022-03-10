@@ -9,6 +9,7 @@ import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
 import "./utils/IJackpot.sol";
+import "./utils/ICurrencyManager.sol";
 
 contract Gachapong is
     Initializable,
@@ -28,6 +29,7 @@ contract Gachapong is
         LotteryType lotteryType;
         uint256 lotteryNumber;
         uint256 amount;
+        address currency;
         address owner;
     }
 
@@ -49,11 +51,13 @@ contract Gachapong is
     bytes32 public constant WORKER_ROLE = keccak256("WORKER_ROLE");
 
     IJackpot public jackpot;
-    IERC20Upgradeable public token;
+    ICurrencyManager public currencyManager;
 
     mapping(uint256 => Lottery) public lotteries;
     mapping(uint256 => LotteryResult) public rounds;
     mapping(address => mapping(uint256 => uint256[])) public userLotteries;
+
+    event NewCurrencyManager(address indexed currencyManager);
 
     event BuyLottery(
         uint256 indexed round,
@@ -61,7 +65,8 @@ contract Gachapong is
         address buyer,
         LotteryType lotteryType,
         uint256 number,
-        uint256 amount
+        uint256 amount,
+        address currency
     );
 
     event CloseRound(
@@ -80,12 +85,13 @@ contract Gachapong is
         uint256 indexed round,
         uint256 indexed id,
         address owner,
-        uint256 reward
+        uint256 reward,
+        address currency
     );
 
     function initialize(
         address _wallet,
-        address _token,
+        address _currencyManager,
         address _jackpot,
         uint16 _twoDigitReward,
         uint16 _threeDigitReward
@@ -96,11 +102,25 @@ contract Gachapong is
 
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
 
-        token = IERC20Upgradeable(_token);
+        currencyManager = ICurrencyManager(_currencyManager);
         jackpot = IJackpot(_jackpot);
         wallet = _wallet;
         twoDigitReward = _twoDigitReward;
         threeDigitReward = _threeDigitReward;
+    }
+
+    function updateCurrencyManager(address _currencyManager)
+        external
+        onlyOwner
+        whenPaused
+    {
+        require(
+            _currencyManager != address(0),
+            "Gachapong.sol: Must be address."
+        );
+        currencyManager = ICurrencyManager(_currencyManager);
+
+        emit NewCurrencyManager(_currencyManager);
     }
 
     function setMultiplyReward(uint16 _twoDigitReward, uint16 _threeDigitReward)
@@ -122,6 +142,7 @@ contract Gachapong is
     }
 
     function buyLottery(
+        address _currency,
         LotteryType _type,
         uint256 _number,
         uint256 _amount
@@ -134,7 +155,16 @@ contract Gachapong is
             require(_number <= 999, "Gachapong.sol: Out of range.");
         }
 
-        token.safeTransferFrom(msg.sender, wallet, _amount);
+        require(
+            currencyManager.isCurrencyWhitelisted(_currency),
+            "Gachapong.sol: Not whitelisted."
+        );
+
+        IERC20Upgradeable(_currency).safeTransferFrom(
+            msg.sender,
+            wallet,
+            _amount
+        );
 
         uint256 id = currentLotteryId++;
         Lottery storage lottery = lotteries[id];
@@ -142,6 +172,7 @@ contract Gachapong is
         lottery.lotteryType = _type;
         lottery.lotteryNumber = _number;
         lottery.amount = _amount;
+        lottery.currency = _currency;
         lottery.owner = msg.sender;
 
         userLotteries[msg.sender][currentLotteryRound].push(id);
@@ -154,7 +185,8 @@ contract Gachapong is
             lottery.owner,
             _type,
             lottery.lotteryNumber,
-            lottery.amount
+            lottery.amount,
+            lottery.currency
         );
     }
 
@@ -230,13 +262,18 @@ contract Gachapong is
 
         require(reward != 0, "Gachapong.sol: No prize.");
 
-        token.safeTransferFrom(wallet, msg.sender, reward);
+        IERC20Upgradeable(lotteries[_lotteryId].currency).safeTransferFrom(
+            wallet,
+            msg.sender,
+            reward
+        );
 
         emit ClaimReward(
             lotteries[_lotteryId].lotteryRound,
             _lotteryId,
             msg.sender,
-            reward
+            reward,
+            lotteries[_lotteryId].currency
         );
     }
 

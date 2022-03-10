@@ -9,7 +9,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     log("Deploying the contracts with the account: ", deployer);
     log("Account Balance: ", (await hre.ethers.provider.getBalance(deployer)).toString());
 
-    const token = await get("StableCoin");
+    const currencyManager = await get("CurrencyManager");
     const jackpot = await get("Jackpot");
 
     const gachapong = await deploy("Gachapong", {
@@ -21,7 +21,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
                     methodName: "initialize",
                     args: [
                         deployer,
-                        token.address,
+                        currencyManager.address,
                         jackpot.address,
                         500, // 5 times
                         1200 // 12 times
