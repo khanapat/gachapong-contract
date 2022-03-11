@@ -263,7 +263,7 @@ describe("Gachapong", function () {
             expect((await gachapong.getLotteries(addr1.address, lotteryRound0)).length).to.equal(1);
 
             expect(await token1.balanceOf(addr1.address)).to.equal(eth(900));
-            expect(await token1.balanceOf(wallet.address)).to.equal(eth(100));
+            expect(await token1.balanceOf(wallet.address)).to.equal(eth(100000).add(eth(100)));
         });
 
         it("Should be able to buy lottery with 3 digit type", async function () {
@@ -287,7 +287,7 @@ describe("Gachapong", function () {
             expect((await gachapong.getLotteries(addr1.address, lotteryRound0)).length).to.equal(1);
 
             expect(await token1.balanceOf(addr1.address)).to.equal(eth(900));
-            expect(await token1.balanceOf(wallet.address)).to.equal(eth(100));
+            expect(await token1.balanceOf(wallet.address)).to.equal(eth(100000).add(eth(100)));
         });
 
         it("Should be unable to buy lottery because of 0 amount", async function () {

@@ -18,6 +18,8 @@ const jackpotId2 = 2;
 
 const addTicketEvent = "AddTicket";
 const closePoolEvent = "ClosePool";
+const generateRandomEvent = "GenerateRandom";
+const claimRewardEvent = "ClaimReward";
 
 type JackpotResult = {
     jackpotId: BigNumber;
@@ -44,6 +46,11 @@ describe("Jackpot", function () {
     function eth(num: number): BigNumber {
         return ethers.utils.parseEther(num.toString());
     };
+
+    async function approveToken(acc: SignerWithAddress, token: StableCoin, amount: BigNumber) {
+        await token.connect(acc).approve(jackpot.address, amount);
+        expect(await token.allowance(acc.address, jackpot.address)).to.equal(amount);
+    }
 
     before(async function () {
         [owner, worker, wallet, gachapong, addr1, addr2, addr3, ...addrs] = await ethers.getSigners();
@@ -79,6 +86,13 @@ describe("Jackpot", function () {
         await expect(() =>
             token.connect(owner).transfer(addr3.address, eth(10))
         ).to.changeTokenBalance(token, addr3, eth(10));
+
+        // wallet
+        await expect(() =>
+            token.connect(owner).transfer(wallet.address, eth(100000))
+        ).to.changeTokenBalance(token, wallet, eth(100000));
+
+        await approveToken(wallet, token, eth(100000));
 
         // add worker role
         const workerRole = await jackpot.WORKER_ROLE();
@@ -232,6 +246,14 @@ describe("Jackpot", function () {
             expect(result.jackpotId).to.equal(jackpotId1);
             expect(result.ref).to.equal(currentBlockNumber + 2);
         });
+
+        it("Should be unable to close pool because of ref", async function () {
+            await jackpot.connect(gachapong).addTicket(addr1.address, eth(120));
+
+            const currentBlockNumber = await ethers.provider.getBlockNumber();
+            await expect(jackpot.connect(worker).closePool(currentBlockNumber))
+                .to.be.revertedWith("Jackpot.sol: Invalid ref.");
+        });
     });
 
     describe("GenerateRandom", function () {
@@ -243,11 +265,75 @@ describe("Jackpot", function () {
             await jackpot.connect(worker).closePool(currentBlockNumber + 2);
             await network.provider.send("evm_mine");
 
-            await jackpot.connect(worker).generateRandom(jackpotRound0);
+            await expect(jackpot.connect(worker).generateRandom(jackpotRound0))
+                .to.emit(jackpot, generateRandomEvent);
 
             const result: JackpotResult = await jackpot.rounds(jackpotRound0);
             expect(result.ref).to.equal(currentBlockNumber + 2);
             expect(result.isClaimable).to.equal(true);
+        });
+
+        it("Should be unable to generate random because of no ref", async function () {
+            await expect(jackpot.connect(worker).generateRandom(jackpotRound0))
+                .to.be.revertedWith("Jackpot.sol: Need ref.");
+        });
+
+        it("Should be unable to generate random because of not this time", async function () {
+            const currentBlockNumber = await ethers.provider.getBlockNumber();
+            await jackpot.connect(worker).closePool(currentBlockNumber + 2);
+
+            await expect(jackpot.connect(worker).generateRandom(jackpotRound0))
+                .to.be.revertedWith("Jackpot.sol: Need more time.");
+        });
+
+        it("Should be unable to generate random because of already gen", async function () {
+            const currentBlockNumber = await ethers.provider.getBlockNumber();
+            await jackpot.connect(worker).closePool(currentBlockNumber + 2);
+            await network.provider.send("evm_mine");
+
+            await jackpot.connect(worker).generateRandom(jackpotRound0);
+            await expect(jackpot.connect(worker).generateRandom(jackpotRound0))
+                .to.be.revertedWith("Jackpot.sol: Already gen.");
+        });
+    });
+
+    describe("ClaimReward", function () {
+        it("Should be able to claim reward", async function () {
+            await jackpot.connect(gachapong).addTicket(addr1.address, eth(120));
+
+            const currentBlockNumber = await ethers.provider.getBlockNumber();
+            await jackpot.connect(worker).closePool(currentBlockNumber + 2);
+            await network.provider.send("evm_mine");
+
+            await jackpot.connect(worker).generateRandom(jackpotRound0);
+
+            await jackpot.connect(owner).setRandom(jackpotRound0, 0);
+
+            await expect(jackpot.connect(addr1).claimReward(jackpotRound0))
+                .to.emit(jackpot, claimRewardEvent)
+                .withArgs(jackpotRound0, addr1.address, eth(120 * 0.3));
+            expect(await token.balanceOf(addr1.address)).to.equal(eth(1000).add(eth(120 * 0.3)));
+            expect(await token.balanceOf(wallet.address)).to.equal(eth(100000).sub(eth(120 * 0.3)));
+        });
+
+        it("Should be unable to claim reward because of not this time", async function () {
+            await expect(jackpot.connect(addr1).claimReward(jackpotRound0))
+                .to.be.revertedWith("Jackpot.sol: Not claimable.");
+        });
+
+        it("Should be able to claim reward", async function () {
+            await jackpot.connect(gachapong).addTicket(addr1.address, eth(120));
+
+            const currentBlockNumber = await ethers.provider.getBlockNumber();
+            await jackpot.connect(worker).closePool(currentBlockNumber + 2);
+            await network.provider.send("evm_mine");
+
+            await jackpot.connect(worker).generateRandom(jackpotRound0);
+
+            await jackpot.connect(owner).setRandom(jackpotRound0, 0);
+
+            await expect(jackpot.connect(addr2).claimReward(jackpotRound0))
+                .to.be.revertedWith("Jackpot.sol: No prize.");
         });
     });
 });

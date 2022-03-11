@@ -44,6 +44,7 @@ interface JackpotInterface extends ethers.utils.Interface {
     "revokeRole(bytes32,address)": FunctionFragment;
     "rounds(uint256)": FunctionFragment;
     "setAddOnPoolReward(uint16)": FunctionFragment;
+    "setRandom(uint256,uint16)": FunctionFragment;
     "setToken(address)": FunctionFragment;
     "setWallet(address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
@@ -139,6 +140,10 @@ interface JackpotInterface extends ethers.utils.Interface {
     functionFragment: "setAddOnPoolReward",
     values: [BigNumberish]
   ): string;
+  encodeFunctionData(
+    functionFragment: "setRandom",
+    values: [BigNumberish, BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "setToken", values: [string]): string;
   encodeFunctionData(functionFragment: "setWallet", values: [string]): string;
   encodeFunctionData(
@@ -224,6 +229,7 @@ interface JackpotInterface extends ethers.utils.Interface {
     functionFragment: "setAddOnPoolReward",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setRandom", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setToken", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setWallet", data: BytesLike): Result;
   decodeFunctionResult(
@@ -466,6 +472,12 @@ export class Jackpot extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setRandom(
+      _round: BigNumberish,
+      _number: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setToken(
       _token: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -616,6 +628,12 @@ export class Jackpot extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setRandom(
+    _round: BigNumberish,
+    _number: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   setToken(
     _token: string,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -753,6 +771,12 @@ export class Jackpot extends BaseContract {
 
     setAddOnPoolReward(
       _addOnPoolReward: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setRandom(
+      _round: BigNumberish,
+      _number: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1041,6 +1065,12 @@ export class Jackpot extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setRandom(
+      _round: BigNumberish,
+      _number: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setToken(
       _token: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1188,6 +1218,12 @@ export class Jackpot extends BaseContract {
 
     setAddOnPoolReward(
       _addOnPoolReward: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setRandom(
+      _round: BigNumberish,
+      _number: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

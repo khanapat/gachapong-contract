@@ -116,7 +116,9 @@ contract Jackpot is
         require(result.ref < block.number, "Jackpot.sol: Need more time.");
         require(!result.isClaimable, "Jackpot.sol: Already gen.");
 
-        uint256 random = _generateRandom(result.ref, result.jackpotId);
+        uint256 random = result.jackpotId != 0
+            ? _generateRandom(result.ref, result.jackpotId)
+            : 0;
         result.winnerId = random;
         result.isClaimable = true;
 
@@ -185,6 +187,12 @@ contract Jackpot is
         returns (uint256[] memory)
     {
         return userJackpot[_round][_user];
+    }
+
+    // for testing. this function will be removed if deploy.
+    function setRandom(uint256 _round, uint16 _number) external onlyOwner {
+        JackpotResult storage result = rounds[_round];
+        result.winnerId = _number;
     }
 
     function pause() external onlyOwner {
