@@ -24,6 +24,8 @@ const threeDigitReward = 1200; // 12 times
 const newCurrencyManagerEvent = "NewCurrencyManager";
 const buyLotteryEvent = "BuyLottery";
 const closeRoundEvent = "CloseRound";
+const generateRandomEvent = "GenerateRandom";
+const claimRewardEvent = "ClaimReward";
 
 type Lottery = {
     lotteryRound: BigNumber;
@@ -46,6 +48,7 @@ describe("Gachapong", function () {
     let Token: StableCoin__factory;
     let token1: StableCoin;
     let token2: StableCoin;
+    let token3: StableCoin;
     let CurrencyManager: CurrencyManager__factory;
     let currencyManager: CurrencyManager;
     let Gachapong: Gachapong__factory;
@@ -91,6 +94,12 @@ describe("Gachapong", function () {
         )) as StableCoin;
         await token2.deployed();
 
+        token3 = (await Token.deploy(
+            "UST TEST",
+            "UST"
+        )) as StableCoin;
+        await token3.deployed();
+
         currencyManager = await CurrencyManager.deploy();
         await currencyManager.deployed();
 
@@ -112,6 +121,7 @@ describe("Gachapong", function () {
         await gachapong.deployed();
 
         // currency
+        // token1
         await expect(() =>
             token1.connect(owner).transfer(addr1.address, eth(1000))
         ).to.changeTokenBalance(token1, addr1, eth(1000));
@@ -124,9 +134,22 @@ describe("Gachapong", function () {
             token1.connect(owner).transfer(addr3.address, eth(10))
         ).to.changeTokenBalance(token1, addr3, eth(10));
 
+        // token2
         await expect(() =>
             token2.connect(owner).transfer(addr1.address, eth(1000))
         ).to.changeTokenBalance(token2, addr1, eth(1000));
+
+        // token3
+        await expect(() =>
+            token3.connect(owner).transfer(addr1.address, eth(1000))
+        ).to.changeTokenBalance(token3, addr1, eth(1000));
+
+        // wallet
+        await expect(() =>
+            token1.connect(owner).transfer(wallet.address, eth(100000))
+        ).to.changeTokenBalance(token1, wallet, eth(100000));
+
+        await approveToken(wallet, token1, eth(100000));
 
         // add worker role
         const workerRole = await gachapong.WORKER_ROLE();
@@ -266,6 +289,31 @@ describe("Gachapong", function () {
             expect(await token1.balanceOf(addr1.address)).to.equal(eth(900));
             expect(await token1.balanceOf(wallet.address)).to.equal(eth(100));
         });
+
+        it("Should be unable to buy lottery because of 0 amount", async function () {
+            const number = 12;
+            await approveToken(addr1, token1, eth(100));
+            await expect(gachapong.connect(addr1).buyLottery(token1.address, twoDigitType, number, 0))
+                .to.be.revertedWith("Gachapong.sol: Minimum bet.");
+        });
+
+        it("Should be unable to buy lottery because of number out of range", async function () {
+            const number1 = 123;
+            await approveToken(addr1, token1, eth(100));
+            await expect(gachapong.connect(addr1).buyLottery(token1.address, twoDigitType, number1, eth(100)))
+                .to.be.revertedWith("Gachapong.sol: Out of range.");
+
+            const number2 = 1234;
+            await expect(gachapong.connect(addr1).buyLottery(token1.address, threeDigitType, number2, eth(100)))
+                .to.be.revertedWith("Gachapong.sol: Out of range.");
+        });
+
+        it("Should be unable to buy lottery because of toke not whitelisted", async function () {
+            const number = 12;
+            await approveToken(addr1, token3, eth(100));
+            await expect(gachapong.connect(addr1).buyLottery(token3.address, twoDigitType, number, eth(100)))
+                .to.be.revertedWith("Gachapong.sol: Not whitelisted.");
+        });
     });
 
     describe("CloseRound", function () {
@@ -304,6 +352,9 @@ describe("Gachapong", function () {
             const currentBlockNumber = await ethers.provider.getBlockNumber();
             await expect(gachapong.connect(worker).closeRound(currentBlockNumber, currentBlockNumber))
                 .to.be.revertedWith("Gachapong.sol: Invalid ref.");
+
+            await expect(gachapong.connect(worker).closeRound(currentBlockNumber - 1, currentBlockNumber - 2))
+                .to.be.revertedWith("Gachapong.sol: Invalid ref.");
         });
     });
 
@@ -318,7 +369,8 @@ describe("Gachapong", function () {
             await network.provider.send("evm_mine");
             await network.provider.send("evm_mine");
 
-            await gachapong.connect(worker).generateRandom(lotteryRound0);
+            await expect(gachapong.connect(worker).generateRandom(lotteryRound0))
+                .to.emit(gachapong, generateRandomEvent);
 
             const result: LotteryResult = await gachapong.rounds(lotteryRound0);
             // console.log(result);
@@ -326,6 +378,7 @@ describe("Gachapong", function () {
             expect(result.threeDigitRef).to.equal(currentBlockNumber + 3);
             expect(result.isClaimable).to.equal(true);
 
+            // console.log(result.twoDigitNumber, result.threeDigitNumber);
             // console.log(currentBlockNumber);
             // console.log(await ethers.provider.getBlockNumber());
 
@@ -334,6 +387,102 @@ describe("Gachapong", function () {
 
             // const blockInfo3 = await ethers.provider.getBlock(13);
             // console.log(blockInfo3.hash);
+        });
+
+        it("Should be unable to generate random because of no ref", async function () {
+            await expect(gachapong.connect(worker).generateRandom(lotteryRound0))
+                .to.be.revertedWith("Gachapong.sol: Need ref.");
+        });
+
+        it("Should be unable to generate random because of not this time", async function () {
+            const number = 99;
+            await approveToken(addr1, token1, eth(100));
+            await gachapong.connect(addr1).buyLottery(token1.address, twoDigitType, number, eth(100));
+
+            const currentBlockNumber = await ethers.provider.getBlockNumber();
+            await gachapong.connect(worker).closeRound(currentBlockNumber + 2, currentBlockNumber + 3);
+
+            await expect(gachapong.connect(worker).generateRandom(lotteryRound0))
+                .to.be.revertedWith("Gachapong.sol: Need more time.");
+        });
+
+        it("Should be unable to generate random because of already gen", async function () {
+            const number = 99;
+            await approveToken(addr1, token1, eth(100));
+            await gachapong.connect(addr1).buyLottery(token1.address, twoDigitType, number, eth(100));
+
+            const currentBlockNumber = await ethers.provider.getBlockNumber();
+            await gachapong.connect(worker).closeRound(currentBlockNumber + 2, currentBlockNumber + 3);
+            await network.provider.send("evm_mine");
+            await network.provider.send("evm_mine");
+
+            await gachapong.connect(worker).generateRandom(lotteryRound0);
+            await expect(gachapong.connect(worker).generateRandom(lotteryRound0))
+                .to.be.revertedWith("Gachapong.sol: Already gen.");
+        });
+    });
+
+    describe("ClaimReward", function () {
+        it("Should be able to claim reward", async function () {
+            const number = 99;
+            await approveToken(addr1, token1, eth(100));
+            await gachapong.connect(addr1).buyLottery(token1.address, twoDigitType, number, eth(100));
+
+            const currentBlockNumber = await ethers.provider.getBlockNumber();
+            await gachapong.connect(worker).closeRound(currentBlockNumber + 2, currentBlockNumber + 3);
+            await network.provider.send("evm_mine");
+            await network.provider.send("evm_mine");
+
+            await gachapong.connect(worker).generateRandom(lotteryRound0);
+
+            await gachapong.connect(owner).setRandom(lotteryRound0, 99, 123);
+
+            await expect(gachapong.connect(addr1).claimReward(lotteryId0))
+                .to.emit(gachapong, claimRewardEvent)
+                .withArgs(lotteryRound0, lotteryId0, addr1.address, eth(100).mul(twoDigitReward / 100), token1.address);
+            expect(await token1.balanceOf(addr1.address)).to.equal(eth(1000).sub(eth(100)).add(eth(100).mul(twoDigitReward / 100)));
+            expect(await token1.balanceOf(wallet.address)).to.equal(eth(100000).add(eth(100)).sub(eth(100).mul(twoDigitReward / 100)));
+        });
+
+        it("Should be unable to claim reward because of not this time", async function () {
+            await expect(gachapong.connect(addr1).claimReward(lotteryId0))
+                .to.be.revertedWith("Gachapong.sol: Not claimable.");
+        });
+
+        it("Should be unable to claim reward because of not owner", async function () {
+            const number = 99;
+            await approveToken(addr1, token1, eth(100));
+            await gachapong.connect(addr1).buyLottery(token1.address, twoDigitType, number, eth(100));
+
+            const currentBlockNumber = await ethers.provider.getBlockNumber();
+            await gachapong.connect(worker).closeRound(currentBlockNumber + 2, currentBlockNumber + 3);
+            await network.provider.send("evm_mine");
+            await network.provider.send("evm_mine");
+
+            await gachapong.connect(worker).generateRandom(lotteryRound0);
+
+            await gachapong.connect(owner).setRandom(lotteryRound0, 99, 123);
+
+            await expect(gachapong.connect(addr2).claimReward(lotteryId0))
+                .to.be.revertedWith("Gachapong.sol: Not owner.");
+        });
+
+        it("Should be unable to claim reward because of not owner", async function () {
+            const number = 99;
+            await approveToken(addr1, token1, eth(100));
+            await gachapong.connect(addr1).buyLottery(token1.address, twoDigitType, number, eth(100));
+
+            const currentBlockNumber = await ethers.provider.getBlockNumber();
+            await gachapong.connect(worker).closeRound(currentBlockNumber + 2, currentBlockNumber + 3);
+            await network.provider.send("evm_mine");
+            await network.provider.send("evm_mine");
+
+            await gachapong.connect(worker).generateRandom(lotteryRound0);
+
+            await gachapong.connect(owner).setRandom(lotteryRound0, 12, 123);
+
+            await expect(gachapong.connect(addr1).claimReward(lotteryId0))
+                .to.be.revertedWith("Gachapong.sol: No prize.");
         });
     });
 });

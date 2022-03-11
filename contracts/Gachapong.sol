@@ -315,6 +315,17 @@ contract Gachapong is
         return userLotteries[_user][_round];
     }
 
+    // for testing. this function will be removed if deploy.
+    function setRandom(
+        uint256 _round,
+        uint16 _twoDigitNumber,
+        uint16 _threeDigitNumber
+    ) external onlyOwner {
+        LotteryResult storage result = rounds[_round];
+        result.twoDigitNumber = _twoDigitNumber;
+        result.threeDigitNumber = _threeDigitNumber;
+    }
+
     function pause() external onlyOwner {
         _pause();
     }

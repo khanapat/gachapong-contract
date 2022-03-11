@@ -45,6 +45,7 @@ interface GachapongInterface extends ethers.utils.Interface {
     "revokeRole(bytes32,address)": FunctionFragment;
     "rounds(uint256)": FunctionFragment;
     "setMultiplyReward(uint16,uint16)": FunctionFragment;
+    "setRandom(uint256,uint16,uint16)": FunctionFragment;
     "setWallet(address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "threeDigitReward()": FunctionFragment;
@@ -141,6 +142,10 @@ interface GachapongInterface extends ethers.utils.Interface {
     functionFragment: "setMultiplyReward",
     values: [BigNumberish, BigNumberish]
   ): string;
+  encodeFunctionData(
+    functionFragment: "setRandom",
+    values: [BigNumberish, BigNumberish, BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "setWallet", values: [string]): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
@@ -233,6 +238,7 @@ interface GachapongInterface extends ethers.utils.Interface {
     functionFragment: "setMultiplyReward",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setRandom", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setWallet", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
@@ -521,6 +527,13 @@ export class Gachapong extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setRandom(
+      _round: BigNumberish,
+      _twoDigitNumber: BigNumberish,
+      _threeDigitNumber: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     setWallet(
       _wallet: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -686,6 +699,13 @@ export class Gachapong extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setRandom(
+    _round: BigNumberish,
+    _twoDigitNumber: BigNumberish,
+    _threeDigitNumber: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   setWallet(
     _wallet: string,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -844,6 +864,13 @@ export class Gachapong extends BaseContract {
     setMultiplyReward(
       _twoDigitReward: BigNumberish,
       _threeDigitReward: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setRandom(
+      _round: BigNumberish,
+      _twoDigitNumber: BigNumberish,
+      _threeDigitNumber: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1195,6 +1222,13 @@ export class Gachapong extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setRandom(
+      _round: BigNumberish,
+      _twoDigitNumber: BigNumberish,
+      _threeDigitNumber: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     setWallet(
       _wallet: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1348,6 +1382,13 @@ export class Gachapong extends BaseContract {
     setMultiplyReward(
       _twoDigitReward: BigNumberish,
       _threeDigitReward: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setRandom(
+      _round: BigNumberish,
+      _twoDigitNumber: BigNumberish,
+      _threeDigitNumber: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
