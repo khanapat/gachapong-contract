@@ -358,5 +358,21 @@ describe("Jackpot", function () {
             await expect(jackpot.connect(addr1).claimReward(jackpotRound0))
                 .to.be.revertedWith("Jackpot.sol: No prize.");
         });
+
+        it("Should be unable to claim reward because of no participation", async function () {
+            await jackpot.connect(gachapong).addTicket(addr1.address, eth(90));
+
+            const currentBlockNumber = await ethers.provider.getBlockNumber();
+            await jackpot.connect(worker).closePool(currentBlockNumber + 2);
+            await network.provider.send("evm_mine");
+
+            await jackpot.connect(worker).generateRandom(jackpotRound0);
+
+            const result: JackpotResult = await jackpot.rounds(jackpotRound0);
+            expect(result.winnerId).to.equal(0);
+
+            await expect(jackpot.connect(addr1).claimReward(jackpotRound0))
+                .to.be.revertedWith("Jackpot.sol: No prize.");
+        });
     });
 });
