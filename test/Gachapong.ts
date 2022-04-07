@@ -308,7 +308,7 @@ describe("Gachapong", function () {
                 .to.be.revertedWith("Gachapong.sol: Out of range.");
         });
 
-        it("Should be unable to buy lottery because of toke not whitelisted", async function () {
+        it("Should be unable to buy lottery because of token not whitelisted", async function () {
             const number = 12;
             await approveToken(addr1, token3, eth(100));
             await expect(gachapong.connect(addr1).buyLottery(token3.address, twoDigitType, number, eth(100)))
@@ -467,7 +467,7 @@ describe("Gachapong", function () {
                 .to.be.revertedWith("Gachapong.sol: Not owner.");
         });
 
-        it("Should be unable to claim reward because of not owner", async function () {
+        it("Should be unable to claim reward because of not winner", async function () {
             const number = 99;
             await approveToken(addr1, token1, eth(100));
             await gachapong.connect(addr1).buyLottery(token1.address, twoDigitType, number, eth(100));

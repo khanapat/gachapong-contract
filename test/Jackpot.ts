@@ -227,6 +227,11 @@ describe("Jackpot", function () {
             expect((await jackpot.getTickets(addr1.address, jackpotRound0)).length).to.equal(1);
             expect((await jackpot.getTickets(addr2.address, jackpotRound0)).length).to.equal(0);
         });
+
+        it("Should be unable to add ticket because of not gachapong role", async function () {
+            await expect(jackpot.connect(addr1).addTicket(addr1.address, eth(100)))
+                .to.be.reverted;
+        });
     });
 
     describe("ClosePool", function () {
@@ -309,6 +314,8 @@ describe("Jackpot", function () {
 
             await jackpot.connect(owner).setRandom(jackpotRound0, 0);
 
+            expect(await jackpot.viewReward(jackpotRound0, addr1.address)).to.equal(eth(120 * 0.3));
+
             await expect(jackpot.connect(addr1).claimReward(jackpotRound0))
                 .to.emit(jackpot, claimRewardEvent)
                 .withArgs(jackpotRound0, addr1.address, eth(120 * 0.3));
@@ -321,7 +328,7 @@ describe("Jackpot", function () {
                 .to.be.revertedWith("Jackpot.sol: Not claimable.");
         });
 
-        it("Should be able to claim reward", async function () {
+        it("Should be unable to claim reward because of not winner", async function () {
             await jackpot.connect(gachapong).addTicket(addr1.address, eth(120));
 
             const currentBlockNumber = await ethers.provider.getBlockNumber();
@@ -333,6 +340,22 @@ describe("Jackpot", function () {
             await jackpot.connect(owner).setRandom(jackpotRound0, 0);
 
             await expect(jackpot.connect(addr2).claimReward(jackpotRound0))
+                .to.be.revertedWith("Jackpot.sol: No prize.");
+        });
+
+        it("Should be unable to claim reward because of already claim", async function () {
+            await jackpot.connect(gachapong).addTicket(addr1.address, eth(120));
+
+            const currentBlockNumber = await ethers.provider.getBlockNumber();
+            await jackpot.connect(worker).closePool(currentBlockNumber + 2);
+            await network.provider.send("evm_mine");
+
+            await jackpot.connect(worker).generateRandom(jackpotRound0);
+
+            await jackpot.connect(owner).setRandom(jackpotRound0, 0);
+
+            await jackpot.connect(addr1).claimReward(jackpotRound0);
+            await expect(jackpot.connect(addr1).claimReward(jackpotRound0))
                 .to.be.revertedWith("Jackpot.sol: No prize.");
         });
     });
