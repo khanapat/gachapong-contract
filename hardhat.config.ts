@@ -10,6 +10,10 @@ import "hardhat-contract-sizer";
 import "hardhat-deploy";
 import "solidity-coverage";
 
+import "./tasks/gachapong/buyLottery";
+import "./tasks/gachapong/grantRole";
+import "./tasks/token/approveToken";
+
 dotenv.config();
 
 const defaultNetwork = "hardhat";

@@ -10,7 +10,8 @@
   "include": [
     "./deploy",
     "./test",
-    "./typechain"
+    "./typechain",
+    "./tasks"
   ],
   "files": [
     "./hardhat.config.ts"
