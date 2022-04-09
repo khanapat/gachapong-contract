@@ -12,7 +12,7 @@ type LotteryResult = {
     isClaimable: boolean;
 };
 
-task("generateRandom", "Generate random at round")
+task("generateRandomGacha", "Generate random at round")
     .addParam("round", "Lottery round")
     .setAction(async (taskArgs, hre) => {
         const Gachapong = await hre.deployments.get("Gachapong");

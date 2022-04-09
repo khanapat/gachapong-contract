@@ -12,7 +12,9 @@ import "solidity-coverage";
 
 import "./tasks/gachapong/buyLottery";
 import "./tasks/gachapong/grantRole";
+import "./tasks/gachapong/closeRound";
 import "./tasks/token/approveToken";
+import "./tasks/currencyManager/addCurrency";
 
 dotenv.config();
 
