@@ -3,7 +3,7 @@ import { task } from "hardhat/config";
 
 let owner: SignerWithAddress;
 
-task("closeRoundGacha", "User buy lottery")
+task("closeRound", "Close lottery round")
     .addParam("ref1", "add block number to be two digit ref")
     .addParam("ref2", "add block number to be three digit ref")
     .setAction(async (taskArgs, hre) => {
@@ -23,7 +23,7 @@ task("closeRoundGacha", "User buy lottery")
         const ref2 = currentBlockNumber + parseInt(taskArgs.ref2);
         console.log("Ref1:", ref1, "Ref2:", ref2);
 
-        const tx = await gachapong.connect(owner).closeRound(taskArgs.ref1, taskArgs.ref2);
+        const tx = await gachapong.connect(owner).closeRound(ref1, ref2);
         await tx.wait(1);
 
         console.log("Current round:", (await gachapong.currentLotteryRound()).toString());

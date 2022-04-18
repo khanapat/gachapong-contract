@@ -3,13 +3,13 @@ import { task } from "hardhat/config";
 
 let owner: SignerWithAddress;
 
-task("grantRoleGacha", "grant role to contract")
+task("grantRoleJack", "grant role to contract")
     .addParam("role", "contract role")
     .addParam("address", "user address")
     .setAction(async (taskArgs, hre) => {
-        const Gachapong = await hre.deployments.get("Gachapong");
-        const gachapong = await hre.ethers.getContractAt("Gachapong", Gachapong.address);
-        console.log("Gachapong Address:", Gachapong.address);
+        const Jackpot = await hre.deployments.get("Jackpot");
+        const jackpot = await hre.ethers.getContractAt("Jackpot", Jackpot.address);
+        console.log("Jackpot Address:", Jackpot.address);
 
         [owner] = await hre.ethers.getSigners();
         console.log("Signer:", owner.address);
@@ -17,10 +17,10 @@ task("grantRoleGacha", "grant role to contract")
         const role = hre.ethers.utils.id(taskArgs.role);
         console.log("Role:", role);
 
-        const tx = await gachapong.connect(owner).grantRole(role, taskArgs.address);
+        const tx = await jackpot.connect(owner).grantRole(role, taskArgs.address);
         await tx.wait();
 
-        console.log(taskArgs.role, "role:", await gachapong.hasRole(role, taskArgs.address));
+        console.log(taskArgs.role, "role:", await jackpot.hasRole(role, taskArgs.address));
     });
 
 export default {};

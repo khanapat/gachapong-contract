@@ -13,8 +13,10 @@ import "solidity-coverage";
 import "./tasks/gachapong/buyLottery";
 import "./tasks/gachapong/grantRole";
 import "./tasks/gachapong/closeRound";
+import "./tasks/gachapong/generateRandom";
 import "./tasks/token/approveToken";
 import "./tasks/currencyManager/addCurrency";
+import "./tasks/jackpot/grantRole";
 
 dotenv.config();
 
@@ -90,8 +92,8 @@ const config: HardhatUserConfig = {
     currency: "USD",
   },
   etherscan: {
-    apiKey: POLYSCAN_API_KEY,
-    // apiKey: ETHERSCAN_API_KEY
+    // apiKey: POLYSCAN_API_KEY,
+    apiKey: ETHERSCAN_API_KEY
   },
 };
 

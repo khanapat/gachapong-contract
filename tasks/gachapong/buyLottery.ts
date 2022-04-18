@@ -19,10 +19,14 @@ task("buyLottery", "User buy lottery")
         console.log("Gachapong Address:", Gachapong.address);
 
         [owner, player1, player2] = await hre.ethers.getSigners();
-        console.log("Signer:", player1);
+        console.log("Signer:", player1.address);
 
         const tx = await gachapong.connect(player1).buyLottery(StableCoin.address, taskArgs.type, taskArgs.number, taskArgs.amount);
         await tx.wait(1);
+
+        const currentRound = await gachapong.currentLotteryRound();
+        const list = await gachapong.getLotteries(player1.address, currentRound);
+        console.log("Lottery List:", list);
     });
 
 export default {};

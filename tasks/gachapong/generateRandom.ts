@@ -20,7 +20,7 @@ task("generateRandomGacha", "Generate random at round")
         console.log("Gachapong Address:", Gachapong.address);
 
         [owner] = await hre.ethers.getSigners();
-        console.log("Signer:", owner);
+        console.log("Signer:", owner.address);
 
         const tx = await gachapong.connect(owner).generateRandom(taskArgs.round);
         await tx.wait(1);

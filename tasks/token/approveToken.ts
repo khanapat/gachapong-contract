@@ -14,12 +14,12 @@ task("approveToken", "User approve token")
         console.log("StableCoin Address:", StableCoin.address);
 
         [owner, player1, player2] = await hre.ethers.getSigners();
-        console.log("Signer:", player1);
+        console.log("Signer:", owner.address);
 
-        const tx = await stableCoin.connect(player1).approve(taskArgs.spender, taskArgs.amount);
+        const tx = await stableCoin.connect(owner).approve(taskArgs.spender, taskArgs.amount);
         await tx.wait(1);
 
-        console.log("Allowance:", (await stableCoin.allowance(player1.address, taskArgs.spender)).toString());
+        console.log("Allowance:", (await stableCoin.allowance(owner.address, taskArgs.spender)).toString());
     });
 
 export default {};
