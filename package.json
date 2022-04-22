@@ -37,5 +37,26 @@
     "@openzeppelin/contracts": "^4.4.2",
     "@openzeppelin/contracts-upgradeable": "^4.4.2",
     "@openzeppelin/hardhat-upgrades": "^1.13.0"
-  }
+  },
+  "name": "gachapong-contract",
+  "description": "This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.",
+  "version": "1.0.0",
+  "main": ".eslintrc.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "hardhat test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://khanapat: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@github.com/khanapat/gachapong-contract.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/khanapat/gachapong-contract/issues"
+  },
+  "homepage": "https://github.com/khanapat/gachapong-contract#readme"
 }

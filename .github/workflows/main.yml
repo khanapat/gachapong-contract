@@ -22,7 +22,7 @@ jobs:
         working-directory: ./
         run: yarn --frozen-lockfile
       - name: Run tests
-        run: npx hardhat test
+        run: yarn test
         env:
           REPORT_GAS: true
 
