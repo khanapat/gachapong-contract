@@ -7,7 +7,7 @@
       "hash": "0x75ea62085a513a3ff08a6bc56bee5bb3e098605956f93db7813050b0c9ddd18a",
       "type": 2,
       "accessList": [],
-      "blockHash": "0x32a9099fb051004d2c076c77639136e398839d1100da1c84abc6b00c369bf648",
+      "blockHash": "0x086395bd966671c4db01b05f0ce27e7589aaa68f81d5badef2492cc16770b596",
       "blockNumber": 25,
       "transactionIndex": 0,
       "confirmations": 1,
@@ -1468,7 +1468,7 @@
           {
             "contract": "Jackpot",
             "label": "rounds",
-            "type": "t_mapping(t_uint256,t_struct(JackpotResult)4009_storage)",
+            "type": "t_mapping(t_uint256,t_struct(JackpotResult)1605_storage)",
             "src": "contracts/Jackpot.sol:39"
           },
           {
@@ -1491,10 +1491,10 @@
           "t_contract(IERC20Upgradeable)800": {
             "label": "contract IERC20Upgradeable"
           },
-          "t_mapping(t_uint256,t_struct(JackpotResult)4009_storage)": {
+          "t_mapping(t_uint256,t_struct(JackpotResult)1605_storage)": {
             "label": "mapping(uint256 => struct Jackpot.JackpotResult)"
           },
-          "t_struct(JackpotResult)4009_storage": {
+          "t_struct(JackpotResult)1605_storage": {
             "label": "struct Jackpot.JackpotResult",
             "members": [
               {
@@ -1660,25 +1660,25 @@
           {
             "contract": "Gachapong",
             "label": "jackpot",
-            "type": "t_contract(IJackpot)4685",
+            "type": "t_contract(IJackpot)2487",
             "src": "contracts/Gachapong.sol:53"
           },
           {
             "contract": "Gachapong",
             "label": "currencyManager",
-            "type": "t_contract(ICurrencyManager)4675",
+            "type": "t_contract(ICurrencyManager)2477",
             "src": "contracts/Gachapong.sol:54"
           },
           {
             "contract": "Gachapong",
             "label": "lotteries",
-            "type": "t_mapping(t_uint256,t_struct(Lottery)3151_storage)",
+            "type": "t_mapping(t_uint256,t_struct(Lottery)1613_storage)",
             "src": "contracts/Gachapong.sol:56"
           },
           {
             "contract": "Gachapong",
             "label": "rounds",
-            "type": "t_mapping(t_uint256,t_struct(LotteryResult)3162_storage)",
+            "type": "t_mapping(t_uint256,t_struct(LotteryResult)1624_storage)",
             "src": "contracts/Gachapong.sol:57"
           },
           {
@@ -1698,16 +1698,16 @@
           "t_address": {
             "label": "address"
           },
-          "t_contract(IJackpot)4685": {
+          "t_contract(IJackpot)2487": {
             "label": "contract IJackpot"
           },
-          "t_contract(ICurrencyManager)4675": {
+          "t_contract(ICurrencyManager)2477": {
             "label": "contract ICurrencyManager"
           },
-          "t_mapping(t_uint256,t_struct(Lottery)3151_storage)": {
+          "t_mapping(t_uint256,t_struct(Lottery)1613_storage)": {
             "label": "mapping(uint256 => struct Gachapong.Lottery)"
           },
-          "t_struct(Lottery)3151_storage": {
+          "t_struct(Lottery)1613_storage": {
             "label": "struct Gachapong.Lottery",
             "members": [
               {
@@ -1716,7 +1716,7 @@
               },
               {
                 "label": "lotteryType",
-                "type": "t_enum(LotteryType)3137"
+                "type": "t_enum(LotteryType)1599"
               },
               {
                 "label": "lotteryNumber",
@@ -1736,17 +1736,17 @@
               }
             ]
           },
-          "t_enum(LotteryType)3137": {
+          "t_enum(LotteryType)1599": {
             "label": "enum Gachapong.LotteryType",
             "members": [
               "TwoDigit",
               "ThreeDigit"
             ]
           },
-          "t_mapping(t_uint256,t_struct(LotteryResult)3162_storage)": {
+          "t_mapping(t_uint256,t_struct(LotteryResult)1624_storage)": {
             "label": "mapping(uint256 => struct Gachapong.LotteryResult)"
           },
-          "t_struct(LotteryResult)3162_storage": {
+          "t_struct(LotteryResult)1624_storage": {
             "label": "struct Gachapong.LotteryResult",
             "members": [
               {
