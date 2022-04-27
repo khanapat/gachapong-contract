@@ -17,6 +17,8 @@ import "./tasks/gachapong/generateRandom";
 import "./tasks/token/approveToken";
 import "./tasks/currencyManager/addCurrency";
 import "./tasks/jackpot/grantRole";
+import "./tasks/jackpot/closePool";
+import "./tasks/jackpot/generateRandom";
 
 dotenv.config();
 

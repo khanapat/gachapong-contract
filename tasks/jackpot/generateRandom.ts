@@ -26,7 +26,7 @@ task("generateRandomJack", "Generate random at round")
         await tx.wait(1);
 
         const result: JackpotResult = await jackpot.rounds(taskArgs.round);
-        console.log("WinnerID:", result.winnerId, "Reward:", result.reward);
+        console.log("WinnerID:", result.winnerId.toString(), "Reward:", result.reward.toString());
     });
 
 export default {};
