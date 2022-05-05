@@ -124,35 +124,38 @@ describe("Jackpot", function () {
     });
 
     describe("SetAddOnPoolReward", function () {
+        beforeEach(async function () {
+            await jackpot.connect(owner).pause();
+        });
+        
         it("Should be able to set addon pool reward", async function () {
             const newAddOnPool = 40; // 40%
-            await jackpot.connect(owner).pause();
             await jackpot.connect(owner).setAddOnPoolReward(newAddOnPool);
             expect(await jackpot.addOnPoolReward()).to.equal(newAddOnPool);
         });
         it("Should be unable to set addon pool reward because of 0", async function () {
             const newAddOnPool = 0; // 0%
-            await jackpot.connect(owner).pause();
             await expect(jackpot.connect(owner).setAddOnPoolReward(newAddOnPool))
                 .to.be.revertedWith("Jackpot.sol: Must be > 0.");
         });
         it("Should be able to set addon pool reward because of not owner", async function () {
             const newAddOnPool = 40; // 40%
-            await jackpot.connect(owner).pause();
             await expect(jackpot.connect(addr1).setAddOnPoolReward(newAddOnPool))
                 .to.be.revertedWith("Ownable: caller is not the owner");
         });
     });
 
     describe("SetWallet", function () {
-        it("Should be able to set wallet", async function () {
+        beforeEach(async function () {
             await jackpot.connect(owner).pause();
+        });
+
+        it("Should be able to set wallet", async function () {
             await jackpot.connect(owner).setWallet(addr1.address);
             expect(await jackpot.wallet()).to.equal(addr1.address);
         });
 
         it("Should be unable to set wallet because of address 0", async function () {
-            await jackpot.connect(owner).pause();
             await expect(jackpot.connect(owner).setWallet(ethers.constants.AddressZero))
                 .to.be.revertedWith("Jackpot.sol: Must be address.");
         });

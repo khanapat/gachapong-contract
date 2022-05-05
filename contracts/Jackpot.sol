@@ -165,7 +165,7 @@ contract Jackpot is
         returns (uint256)
     {
         uint256[] memory tickets = userJackpot[_round][_user];
-        for (uint256 i; i < tickets.length; i++) {
+        for (uint256 i; i < tickets.length; ++i) {
             if (tickets[i] == rounds[_round].winnerId) {
                 return rounds[_round].reward;
             }
