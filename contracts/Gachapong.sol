@@ -123,6 +123,11 @@ contract Gachapong is
         emit NewCurrencyManager(_currencyManager);
     }
 
+    function setJackpot(address _jackpot) external onlyOwner whenPaused {
+        require(_jackpot != address(0), "Gachapong.sol: Must be address.");
+        jackpot = IJackpot(_jackpot);
+    }
+
     function setMultiplyReward(uint16 _twoDigitReward, uint16 _threeDigitReward)
         external
         onlyOwner
