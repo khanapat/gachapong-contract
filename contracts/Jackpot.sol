@@ -91,7 +91,7 @@ contract Jackpot is
     {
         uint256 ticketAmount = _betAmount / ticketPrice;
         if (ticketAmount > 0) {
-            for (uint256 i; i < ticketAmount; i++) {
+            for (uint256 i; i < ticketAmount; ++i) {
                 uint256 id = rounds[currentJackpotRound].jackpotId++;
                 userJackpot[currentJackpotRound][_user].push(id);
                 emit AddTicket(_user, id);
