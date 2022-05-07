@@ -48,11 +48,12 @@ interface JackpotInterface extends ethers.utils.Interface {
     "setToken(address)": FunctionFragment;
     "setWallet(address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
+    "ticketOwner(uint256,uint256)": FunctionFragment;
     "ticketPrice()": FunctionFragment;
     "token()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "unpause()": FunctionFragment;
-    "userJackpot(uint256,address,uint256)": FunctionFragment;
+    "userTickets(uint256,address,uint256)": FunctionFragment;
     "viewReward(uint256,address)": FunctionFragment;
     "wallet()": FunctionFragment;
   };
@@ -151,6 +152,10 @@ interface JackpotInterface extends ethers.utils.Interface {
     values: [BytesLike]
   ): string;
   encodeFunctionData(
+    functionFragment: "ticketOwner",
+    values: [BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "ticketPrice",
     values?: undefined
   ): string;
@@ -161,7 +166,7 @@ interface JackpotInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "unpause", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "userJackpot",
+    functionFragment: "userTickets",
     values: [BigNumberish, string, BigNumberish]
   ): string;
   encodeFunctionData(
@@ -237,6 +242,10 @@ interface JackpotInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "ticketOwner",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "ticketPrice",
     data: BytesLike
   ): Result;
@@ -247,7 +256,7 @@ interface JackpotInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "unpause", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "userJackpot",
+    functionFragment: "userTickets",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "viewReward", data: BytesLike): Result;
@@ -257,7 +266,7 @@ interface JackpotInterface extends ethers.utils.Interface {
     "AddTicket(address,uint256)": EventFragment;
     "ClaimReward(uint256,address,uint256)": EventFragment;
     "ClosePool(uint256,uint256)": EventFragment;
-    "GenerateRandom(uint256,uint256)": EventFragment;
+    "GenerateRandom(uint256,uint256,uint256,address)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Paused(address)": EventFragment;
     "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
@@ -295,7 +304,12 @@ export type ClosePoolEvent = TypedEvent<
 >;
 
 export type GenerateRandomEvent = TypedEvent<
-  [BigNumber, BigNumber] & { round: BigNumber; random: BigNumber }
+  [BigNumber, BigNumber, BigNumber, string] & {
+    round: BigNumber;
+    random: BigNumber;
+    reward: BigNumber;
+    winner: string;
+  }
 >;
 
 export type OwnershipTransferredEvent = TypedEvent<
@@ -493,6 +507,12 @@ export class Jackpot extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
+    ticketOwner(
+      arg0: BigNumberish,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
     ticketPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     token(overrides?: CallOverrides): Promise<[string]>;
@@ -506,7 +526,7 @@ export class Jackpot extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    userJackpot(
+    userTickets(
       arg0: BigNumberish,
       arg1: string,
       arg2: BigNumberish,
@@ -649,6 +669,12 @@ export class Jackpot extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
+  ticketOwner(
+    arg0: BigNumberish,
+    arg1: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
   ticketPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
   token(overrides?: CallOverrides): Promise<string>;
@@ -662,7 +688,7 @@ export class Jackpot extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  userJackpot(
+  userTickets(
     arg0: BigNumberish,
     arg1: string,
     arg2: BigNumberish,
@@ -789,6 +815,12 @@ export class Jackpot extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
+    ticketOwner(
+      arg0: BigNumberish,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
     ticketPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
     token(overrides?: CallOverrides): Promise<string>;
@@ -800,7 +832,7 @@ export class Jackpot extends BaseContract {
 
     unpause(overrides?: CallOverrides): Promise<void>;
 
-    userJackpot(
+    userTickets(
       arg0: BigNumberish,
       arg1: string,
       arg2: BigNumberish,
@@ -867,20 +899,24 @@ export class Jackpot extends BaseContract {
       { round: BigNumber; ref: BigNumber }
     >;
 
-    "GenerateRandom(uint256,uint256)"(
+    "GenerateRandom(uint256,uint256,uint256,address)"(
       round?: BigNumberish | null,
-      random?: null
+      random?: null,
+      reward?: null,
+      winner?: null
     ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { round: BigNumber; random: BigNumber }
+      [BigNumber, BigNumber, BigNumber, string],
+      { round: BigNumber; random: BigNumber; reward: BigNumber; winner: string }
     >;
 
     GenerateRandom(
       round?: BigNumberish | null,
-      random?: null
+      random?: null,
+      reward?: null,
+      winner?: null
     ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { round: BigNumber; random: BigNumber }
+      [BigNumber, BigNumber, BigNumber, string],
+      { round: BigNumber; random: BigNumber; reward: BigNumber; winner: string }
     >;
 
     "OwnershipTransferred(address,address)"(
@@ -1086,6 +1122,12 @@ export class Jackpot extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    ticketOwner(
+      arg0: BigNumberish,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     ticketPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
     token(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1099,7 +1141,7 @@ export class Jackpot extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    userJackpot(
+    userTickets(
       arg0: BigNumberish,
       arg1: string,
       arg2: BigNumberish,
@@ -1242,6 +1284,12 @@ export class Jackpot extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    ticketOwner(
+      arg0: BigNumberish,
+      arg1: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     ticketPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     token(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -1255,7 +1303,7 @@ export class Jackpot extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    userJackpot(
+    userTickets(
       arg0: BigNumberish,
       arg1: string,
       arg2: BigNumberish,

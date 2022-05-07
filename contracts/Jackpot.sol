@@ -37,13 +37,14 @@ contract Jackpot is
     IERC20Upgradeable public token;
 
     mapping(uint256 => JackpotResult) public rounds;
-    mapping(uint256 => mapping(address => uint256[])) public userJackpot;
+    mapping(uint256 => mapping(uint256 => address)) public ticketOwner;
+    mapping(uint256 => mapping(address => uint256[])) public userTickets;
 
     event AddTicket(address user, uint256 ticketId);
 
     event ClosePool(uint256 indexed round, uint256 ref);
 
-    event GenerateRandom(uint256 indexed round, uint256 random);
+    event GenerateRandom(uint256 indexed round, uint256 random, uint256 reward, address winner);
 
     event ClaimReward(uint256 indexed round, address owner, uint256 reward);
 
@@ -93,7 +94,8 @@ contract Jackpot is
         if (ticketAmount > 0) {
             for (uint256 i; i < ticketAmount; ++i) {
                 uint256 id = rounds[currentJackpotRound].jackpotId++;
-                userJackpot[currentJackpotRound][_user].push(id);
+                ticketOwner[currentJackpotRound][id] = _user;
+                userTickets[currentJackpotRound][_user].push(id);
                 emit AddTicket(_user, id);
             }
         }
@@ -122,7 +124,7 @@ contract Jackpot is
         result.winnerId = random;
         result.isClaimable = true;
 
-        emit GenerateRandom(_round, result.winnerId);
+        emit GenerateRandom(_round, result.winnerId, result.reward, ticketOwner[_round][random]);
     }
 
     function _generateRandom(uint256 _ref, uint256 _totalTicket)
@@ -164,11 +166,8 @@ contract Jackpot is
         view
         returns (uint256)
     {
-        uint256[] memory tickets = userJackpot[_round][_user];
-        for (uint256 i; i < tickets.length; ++i) {
-            if (tickets[i] == rounds[_round].winnerId) {
-                return rounds[_round].reward;
-            }
+        if (_user == ticketOwner[_round][rounds[_round].winnerId]) {
+            return rounds[_round].reward;
         }
         return 0;
     }
@@ -186,7 +185,7 @@ contract Jackpot is
         view
         returns (uint256[] memory)
     {
-        return userJackpot[_round][_user];
+        return userTickets[_round][_user];
     }
 
     // for testing. this function will be removed if deploy.
