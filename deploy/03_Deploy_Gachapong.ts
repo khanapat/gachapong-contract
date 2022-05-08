@@ -23,8 +23,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
                         deployer,
                         currencyManager.address,
                         jackpot.address,
-                        500, // 5 times
-                        1200 // 12 times
+                        5000, // 50 times
+                        45000 // 450 times
                     ],
                 }
             }

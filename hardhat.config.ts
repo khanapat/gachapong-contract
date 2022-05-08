@@ -28,6 +28,7 @@ const POLYSCAN_API_KEY = process.env.POLYSCAN_API_KEY || "";
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || "";
 const MNEMONIC = process.env.MNEMONIC || "";
 const INFURA_KEY = process.env.INFURA_KEY || "";
+const ALCHEMY_RINKEBY_URL = process.env.ALCHEMY_RINKEBY_URL || "";
 
 const config: HardhatUserConfig = {
   defaultNetwork,
