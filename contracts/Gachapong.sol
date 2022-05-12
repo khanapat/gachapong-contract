@@ -253,32 +253,34 @@ contract Gachapong is
     }
 
     function claimReward(uint256 _lotteryId) external {
+        Lottery memory lottery = lotteries[_lotteryId];
+
         require(
-            rounds[_lotteryId].isClaimable,
+            rounds[lottery.lotteryRound].isClaimable,
             "Gachapong.sol: Not claimable."
         );
         require(
-            lotteries[_lotteryId].owner == msg.sender,
+            lottery.owner == msg.sender,
             "Gachapong.sol: Not owner."
         );
 
-        lotteries[_lotteryId].owner = address(0);
+        lottery.owner = address(0);
         uint256 reward = _calculateReward(_lotteryId);
 
         require(reward != 0, "Gachapong.sol: No prize.");
 
-        IERC20Upgradeable(lotteries[_lotteryId].currency).safeTransferFrom(
+        IERC20Upgradeable(lottery.currency).safeTransferFrom(
             wallet,
             msg.sender,
             reward
         );
 
         emit ClaimReward(
-            lotteries[_lotteryId].lotteryRound,
+            lottery.lotteryRound,
             _lotteryId,
             msg.sender,
             reward,
-            lotteries[_lotteryId].currency
+            lottery.currency
         );
     }
 

@@ -84,7 +84,8 @@ const config: HardhatUserConfig = {
       chainId: 4,
       accounts: {
         mnemonic: MNEMONIC
-      }
+      },
+      gasPrice: 50000000000, // 50 gwei
     },
     hardhat: {
       chainId: 31337,

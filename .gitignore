@@ -4,6 +4,7 @@ node_modules
 .idea
 .deps
 .openzeppelin
+.DS_Store
 coverage
 coverage.json
 deployments

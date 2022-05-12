@@ -7,7 +7,7 @@
       "hash": "0xedc44881cb3a9a43e90df01e95d825e97d0b8bfd2b0b589699209fa05d24de92",
       "type": 2,
       "accessList": [],
-      "blockHash": "0xe13d103dc199bac661a6c6dbb969675c1f3de28113952393e71cb06755e4d9e2",
+      "blockHash": "0xb660c5a9b612ea482b99844f283ff64aa68283bd5bba3aae7dad718700d33496",
       "blockNumber": 25,
       "transactionIndex": 0,
       "confirmations": 1,
@@ -50,42 +50,42 @@
     },
     {
       "address": "0x09635F643e140090A9A8Dcd712eD6285858ceBef",
-      "txHash": "0x49778ed7230513928b03e1c62326b7aa0b92c510a8f5ec8a0fda357b7d278906",
+      "txHash": "0x195c705bc8642c13a416929a65eb2ffc4609da31add1f54fb639c0893587759f",
       "kind": "transparent"
     },
     {
       "address": "0x99bbA657f2BbC93c02D617f8bA121cB8Fc104Acf",
-      "txHash": "0x8ff1c7caa3d3dae122f3417dc35da7e25183efb83e36fcab50a62ddcfd6d42e0",
+      "txHash": "0xc164da6a48824d83b44998a5ba7be9c4f5a7f27e96f248e31897801e471566ab",
       "kind": "transparent"
     },
     {
       "address": "0x0E801D84Fa97b50751Dbf25036d067dCf18858bF",
-      "txHash": "0xd4a052327cac6da4817f024b860c90b5a13c79fc1940481d001a788d55ccaacd",
+      "txHash": "0x4e2e115adbb903a6f807ada4d69bd991a6d7891658a2a99dd580da8926ef258d",
       "kind": "transparent"
     },
     {
       "address": "0xc351628EB244ec633d5f21fBD6621e1a683B1181",
-      "txHash": "0x4ab2860ffb14fc25633bbe8c7a494e823b5914748912382386e2112dd0a502a2",
+      "txHash": "0x1b79e2e372f050b8241d882e3781ac136c41a4e5dbc63997c31c5da71b78366a",
       "kind": "transparent"
     },
     {
       "address": "0xFD471836031dc5108809D173A067e8486B9047A3",
-      "txHash": "0x87ebf4f0b066dc4ba06291506d288b7c698369962622cc47e39909d3ec9f9949",
+      "txHash": "0x0c8305292367fa112cc38d6c6564e1c2c499b958f98c11d1975e05d6687da4d5",
       "kind": "transparent"
     },
     {
       "address": "0x51A1ceB83B83F1985a81C295d1fF28Afef186E02",
-      "txHash": "0x27bc28ef0e56e5b226aec3f8b79fa152c08c7d1b63cfb7af60c6217b1ebd33e6",
+      "txHash": "0x1d86ac239107e7651a5effe5e40918528e9aadbb3105b87f0438f3aeb3dc559d",
       "kind": "transparent"
     },
     {
       "address": "0x36b58F5C1969B7b6591D752ea6F5486D069010AB",
-      "txHash": "0xed701e8dc75a9ce3c7bf6952c0e00cd2b7af20c5eb6b7456f5652afd77e9fd8f",
+      "txHash": "0x89f15346d22a398c58cf622b8cc9eeaa2d1a721ac1172aaed764936a3778d7ee",
       "kind": "transparent"
     },
     {
       "address": "0x4C2F7092C2aE51D986bEFEe378e50BD4dB99C901",
-      "txHash": "0x6e6d8edc324ed950f41179aeef61f9ee72ed7d18c7928f49879b78240bbea5ec",
+      "txHash": "0x7223e6066b4d74d9b13991b60729cf7dc90b3ae66dc2b21513a79a17a742bbaa",
       "kind": "transparent"
     },
     {
@@ -548,7 +548,7 @@
           {
             "contract": "Jackpot",
             "label": "rounds",
-            "type": "t_mapping(t_uint256,t_struct(JackpotResult)1605_storage)",
+            "type": "t_mapping(t_uint256,t_struct(JackpotResult)4034_storage)",
             "src": "contracts/Jackpot.sol:39"
           },
           {
@@ -577,10 +577,10 @@
           "t_contract(IERC20Upgradeable)800": {
             "label": "contract IERC20Upgradeable"
           },
-          "t_mapping(t_uint256,t_struct(JackpotResult)1605_storage)": {
+          "t_mapping(t_uint256,t_struct(JackpotResult)4034_storage)": {
             "label": "mapping(uint256 => struct Jackpot.JackpotResult)"
           },
-          "t_struct(JackpotResult)1605_storage": {
+          "t_struct(JackpotResult)4034_storage": {
             "label": "struct Jackpot.JackpotResult",
             "members": [
               {
@@ -654,9 +654,9 @@
         }
       }
     },
-    "7deb2773304dc70f76ed2ac8e1c5300ca6c43f392bfcda2443dee9c741617298": {
+    "9c93e042f749cd6e472dc126e9580c580c46e713d83e05fdcef2c3a0758b163c": {
       "address": "0x7a2088a1bFc9d81c55368AE168C2C02570cB814F",
-      "txHash": "0xab1dc7af4efb79f8b71e5fd4f175a93f1bb649d79dc75b2ee30d24c125d45119",
+      "txHash": "0x3e0eb8027c3b52d914e71325ecc9dbd286cd7c3663643825077e018d4df5066f",
       "layout": {
         "storage": [
           {
@@ -752,25 +752,25 @@
           {
             "contract": "Gachapong",
             "label": "jackpot",
-            "type": "t_contract(IJackpot)2513",
+            "type": "t_contract(IJackpot)4714",
             "src": "contracts/Gachapong.sol:53"
           },
           {
             "contract": "Gachapong",
             "label": "currencyManager",
-            "type": "t_contract(ICurrencyManager)2503",
+            "type": "t_contract(ICurrencyManager)4704",
             "src": "contracts/Gachapong.sol:54"
           },
           {
             "contract": "Gachapong",
             "label": "lotteries",
-            "type": "t_mapping(t_uint256,t_struct(Lottery)1613_storage)",
+            "type": "t_mapping(t_uint256,t_struct(Lottery)3151_storage)",
             "src": "contracts/Gachapong.sol:56"
           },
           {
             "contract": "Gachapong",
             "label": "rounds",
-            "type": "t_mapping(t_uint256,t_struct(LotteryResult)1624_storage)",
+            "type": "t_mapping(t_uint256,t_struct(LotteryResult)3162_storage)",
             "src": "contracts/Gachapong.sol:57"
           },
           {
@@ -790,16 +790,16 @@
           "t_address": {
             "label": "address"
           },
-          "t_contract(IJackpot)2513": {
+          "t_contract(IJackpot)4714": {
             "label": "contract IJackpot"
           },
-          "t_contract(ICurrencyManager)2503": {
+          "t_contract(ICurrencyManager)4704": {
             "label": "contract ICurrencyManager"
           },
-          "t_mapping(t_uint256,t_struct(Lottery)1613_storage)": {
+          "t_mapping(t_uint256,t_struct(Lottery)3151_storage)": {
             "label": "mapping(uint256 => struct Gachapong.Lottery)"
           },
-          "t_struct(Lottery)1613_storage": {
+          "t_struct(Lottery)3151_storage": {
             "label": "struct Gachapong.Lottery",
             "members": [
               {
@@ -808,7 +808,7 @@
               },
               {
                 "label": "lotteryType",
-                "type": "t_enum(LotteryType)1599"
+                "type": "t_enum(LotteryType)3137"
               },
               {
                 "label": "lotteryNumber",
@@ -828,17 +828,17 @@
               }
             ]
           },
-          "t_enum(LotteryType)1599": {
+          "t_enum(LotteryType)3137": {
             "label": "enum Gachapong.LotteryType",
             "members": [
               "TwoDigit",
               "ThreeDigit"
             ]
           },
-          "t_mapping(t_uint256,t_struct(LotteryResult)1624_storage)": {
+          "t_mapping(t_uint256,t_struct(LotteryResult)3162_storage)": {
             "label": "mapping(uint256 => struct Gachapong.LotteryResult)"
           },
-          "t_struct(LotteryResult)1624_storage": {
+          "t_struct(LotteryResult)3162_storage": {
             "label": "struct Gachapong.LotteryResult",
             "members": [
               {
