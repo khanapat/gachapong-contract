@@ -499,6 +499,19 @@ describe("Gachapong", function () {
             expect(await token1.balanceOf(wallet.address)).to.equal(eth(100000).add(eth(100)).sub(eth(100).mul(twoDigitReward / 100)));
         });
 
+        it("Should be unable to claim reward because of already claim", async function () {
+            await network.provider.send("evm_mine");
+            await network.provider.send("evm_mine");
+
+            await gachapong.connect(worker).generateRandom(lotteryRound0);
+
+            await gachapong.connect(owner).setRandom(lotteryRound0, 99, 123);
+
+            await gachapong.connect(addr1).claimReward(lotteryId0);
+            await expect(gachapong.connect(addr1).claimReward(lotteryId0))
+                .to.be.revertedWith("Gachapong.sol: Not owner.");
+        });
+
         it("Should be unable to claim reward because of not this time", async function () {
             await expect(gachapong.connect(addr1).claimReward(lotteryId0))
                 .to.be.revertedWith("Gachapong.sol: Not claimable.");

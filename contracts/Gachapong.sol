@@ -253,7 +253,7 @@ contract Gachapong is
     }
 
     function claimReward(uint256 _lotteryId) external {
-        Lottery memory lottery = lotteries[_lotteryId];
+        Lottery storage lottery = lotteries[_lotteryId];
 
         require(
             rounds[lottery.lotteryRound].isClaimable,
