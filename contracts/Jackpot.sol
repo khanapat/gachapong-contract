@@ -106,7 +106,14 @@ contract Jackpot is
         require(_ref > block.number, "Jackpot.sol: Invalid ref.");
 
         uint256 round = currentJackpotRound++;
-        rounds[round].ref = _ref;
+
+        JackpotResult storage prevRound = rounds[round];
+        prevRound.ref = _ref;
+
+        if (prevRound.jackpotId == 0) {
+            rounds[currentJackpotRound].reward += prevRound.reward;
+            prevRound.reward = 0;
+        }
 
         emit ClosePool(round, _ref);
     }

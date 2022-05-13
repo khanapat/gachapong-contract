@@ -251,8 +251,34 @@ describe("Jackpot", function () {
 
             const result: JackpotResult = await jackpot.rounds(jackpotRound0);
             // console.log(result);
-            expect(result.jackpotId).to.equal(jackpotId1);
+            expect(result.reward).to.equal(eth(45));
+            expect(result.jackpotId).to.equal(jackpotId1); // 1 tickets
             expect(result.ref).to.equal(currentBlockNumber + 2);
+            expect(result.isClaimable).to.equal(false);
+        });
+
+        it("Should be able to close pool with no ticket", async function () {
+            await jackpot.connect(gachapong).addTicket(addr1.address, eth(50));
+            await jackpot.connect(gachapong).addTicket(addr2.address, eth(30));
+
+            const currentBlockNumber = await ethers.provider.getBlockNumber();
+            await expect(jackpot.connect(worker).closePool(currentBlockNumber + 2))
+                .to.emit(jackpot, closePoolEvent)
+                .withArgs(jackpotRound0, currentBlockNumber + 2);
+
+            expect(await jackpot.currentJackpotRound()).to.equal(jackpotRound1);
+
+            const result0: JackpotResult = await jackpot.rounds(jackpotRound0);
+            // console.log(result);
+            expect(result0.reward).to.equal(0); // reward move to next round
+            expect(result0.jackpotId).to.equal(0); // 0 tickets
+            expect(result0.ref).to.equal(currentBlockNumber + 2);
+            expect(result0.isClaimable).to.equal(false);
+
+            const result1: JackpotResult = await jackpot.rounds(jackpotRound1);
+            expect(result1.reward).to.equal(eth(24));
+            expect(result1.jackpotId).to.equal(0);
+            expect(result1.isClaimable).to.equal(false);
         });
 
         it("Should be unable to close pool because of ref", async function () {
@@ -277,8 +303,34 @@ describe("Jackpot", function () {
                 .to.emit(jackpot, generateRandomEvent);
 
             const result: JackpotResult = await jackpot.rounds(jackpotRound0);
+            expect(result.jackpotId).to.equal(1);
             expect(result.ref).to.equal(currentBlockNumber + 2);
+            expect(result.winnerId).to.equal(0);
+            expect(result.reward).to.equal(eth(45));
             expect(result.isClaimable).to.equal(true);
+           
+            expect(await jackpot.ticketOwner(jackpotRound0, result.winnerId)).to.equal(addr1.address);
+        });
+
+        it("Should be able to generate random with no ticket", async function () {
+            await jackpot.connect(gachapong).addTicket(addr1.address, eth(50));
+            await jackpot.connect(gachapong).addTicket(addr2.address, eth(30));
+
+            const currentBlockNumber = await ethers.provider.getBlockNumber();
+            await jackpot.connect(worker).closePool(currentBlockNumber + 2);
+            await network.provider.send("evm_mine");
+
+            await expect(jackpot.connect(worker).generateRandom(jackpotRound0))
+                .to.emit(jackpot, generateRandomEvent);
+
+            const result: JackpotResult = await jackpot.rounds(jackpotRound0);
+            expect(result.jackpotId).to.equal(0);
+            expect(result.ref).to.equal(currentBlockNumber + 2);
+            expect(result.winnerId).to.equal(0);
+            expect(result.reward).to.equal(0);
+            expect(result.isClaimable).to.equal(true);
+           
+            expect(await jackpot.ticketOwner(jackpotRound0, result.winnerId)).to.equal(ethers.constants.AddressZero);
         });
 
         it("Should be unable to generate random because of no ref", async function () {
