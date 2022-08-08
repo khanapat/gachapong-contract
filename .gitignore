@@ -8,6 +8,7 @@ node_modules
 coverage
 coverage.json
 deployments
+arguments
 
 #Hardhat files
 cache
