@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 import { HardhatUserConfig, task } from "hardhat/config";
 import "@nomiclabs/hardhat-etherscan";
 import "@nomiclabs/hardhat-waffle";
-import '@openzeppelin/hardhat-upgrades';
+import "@openzeppelin/hardhat-upgrades";
 import "@typechain/hardhat";
 import "hardhat-gas-reporter";
 import "hardhat-contract-sizer";
@@ -26,6 +26,7 @@ const defaultNetwork = "hardhat";
 const REPORT_GAS = process.env.REPORT_GAS !== undefined;
 const POLYSCAN_API_KEY = process.env.POLYSCAN_API_KEY || "";
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || "";
+const BSCSCAN_API_KEY = process.env.BSCSCAN_API_KEY || "";
 const MNEMONIC = process.env.MNEMONIC || "";
 const INFURA_KEY = process.env.INFURA_KEY || "";
 const ALCHEMY_RINKEBY_URL = process.env.ALCHEMY_RINKEBY_URL || "";
@@ -83,9 +84,16 @@ const config: HardhatUserConfig = {
       url: `https://rinkeby.infura.io/v3/${INFURA_KEY}`,
       chainId: 4,
       accounts: {
-        mnemonic: MNEMONIC
+        mnemonic: MNEMONIC,
       },
       gasPrice: 50000000000, // 50 gwei
+    },
+    bsctest: {
+      url: "https://data-seed-prebsc-2-s3.binance.org:8545/",
+      chainId: 97,
+      accounts: {
+        mnemonic: MNEMONIC,
+      },
     },
     hardhat: {
       chainId: 31337,
@@ -96,8 +104,12 @@ const config: HardhatUserConfig = {
     currency: "USD",
   },
   etherscan: {
-    // apiKey: POLYSCAN_API_KEY,
-    apiKey: ETHERSCAN_API_KEY
+    // apiKey: {
+    //   bscTestnet: BSCSCAN_API_KEY,
+    //   rinkeby: ETHERSCAN_API_KEY,
+    //   polygonMumbai: POLYSCAN_API_KEY,
+    // },
+    apiKey: BSCSCAN_API_KEY,
   },
 };
 

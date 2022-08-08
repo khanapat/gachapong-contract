@@ -1,27 +1,28 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
-import { ethers, deployments, network, getChainId } from "hardhat";
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployer } = await hre.getNamedAccounts();
-  const { deploy, log } = deployments;
+  const { deploy, log, get } = hre.deployments;
+  const chainId = await hre.getChainId();
 
   log("Deploying the contracts with the account: ", deployer);
   log(
     "Account Balance: ",
-    (await ethers.provider.getBalance(deployer)).toString()
+    (await hre.ethers.provider.getBalance(deployer)).toString()
   );
 
-  const stable = await deploy("StableCoin", {
+  const hotWallet = await deploy("HotWallet", {
     from: deployer,
-    args: ["USDC TEST", "USDC"],
+    args: ["0xD7da76c1D4f5Af492dB089062797AAd5b5D1c7E9"],
     log: true,
   });
 
-  log("Token address: ", stable.address, " network: ", network.name);
+  log("HotWallet address: ", hotWallet.address, " network: ", hre.network.name);
   log("----------------------------------------------------");
 };
 
 export default func;
-func.id = "deploy_stablecoin";
-func.tags = ["all", "stablecoin", "main"];
+
+func.id = "deploy_hotwallet";
+func.tags = ["all", "hotwallet"];
