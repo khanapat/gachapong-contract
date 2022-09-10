@@ -187,7 +187,7 @@ describe("Jackpot", function () {
         jackpot.connect(gachapong).addTicket(addr1.address, eth(100))
       )
         .to.emit(jackpot, addTicketEvent)
-        .withArgs(addr1.address, jackpotId0);
+        .withArgs(jackpotRound0, addr1.address, jackpotId0);
 
       expect(await jackpot.currentJackpotRound()).to.equal(jackpotRound0);
 
@@ -207,7 +207,7 @@ describe("Jackpot", function () {
         jackpot.connect(gachapong).addTicket(addr1.address, eth(150))
       )
         .to.emit(jackpot, addTicketEvent)
-        .withArgs(addr1.address, jackpotId0);
+        .withArgs(jackpotRound0, addr1.address, jackpotId0);
 
       expect(await jackpot.currentJackpotRound()).to.equal(jackpotRound0);
 
@@ -227,9 +227,9 @@ describe("Jackpot", function () {
         jackpot.connect(gachapong).addTicket(addr1.address, eth(200))
       )
         .to.emit(jackpot, addTicketEvent)
-        .withArgs(addr1.address, jackpotId0)
+        .withArgs(jackpotRound0, addr1.address, jackpotId0)
         .to.emit(jackpot, addTicketEvent)
-        .withArgs(addr1.address, jackpotId1);
+        .withArgs(jackpotRound0, addr1.address, jackpotId1);
 
       expect(await jackpot.currentJackpotRound()).to.equal(jackpotRound0);
 
@@ -249,7 +249,7 @@ describe("Jackpot", function () {
         jackpot.connect(gachapong).addTicket(addr1.address, eth(100))
       )
         .to.emit(jackpot, addTicketEvent)
-        .withArgs(addr1.address, jackpotId0);
+        .withArgs(jackpotRound0, addr1.address, jackpotId0);
 
       await jackpot.connect(gachapong).addTicket(addr2.address, eth(30));
 

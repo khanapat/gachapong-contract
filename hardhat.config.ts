@@ -19,6 +19,7 @@ import "./tasks/currencyManager/addCurrency";
 import "./tasks/jackpot/grantRole";
 import "./tasks/jackpot/closePool";
 import "./tasks/jackpot/generateRandom";
+import "./tasks/jackpot/round";
 
 dotenv.config();
 

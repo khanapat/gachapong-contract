@@ -263,7 +263,7 @@ interface JackpotInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "wallet", data: BytesLike): Result;
 
   events: {
-    "AddTicket(address,uint256)": EventFragment;
+    "AddTicket(uint256,address,uint256)": EventFragment;
     "ClaimReward(uint256,address,uint256)": EventFragment;
     "ClosePool(uint256,uint256)": EventFragment;
     "GenerateRandom(uint256,uint256,uint256,address)": EventFragment;
@@ -288,7 +288,11 @@ interface JackpotInterface extends ethers.utils.Interface {
 }
 
 export type AddTicketEvent = TypedEvent<
-  [string, BigNumber] & { user: string; ticketId: BigNumber }
+  [BigNumber, string, BigNumber] & {
+    round: BigNumber;
+    user: string;
+    ticketId: BigNumber;
+  }
 >;
 
 export type ClaimRewardEvent = TypedEvent<
@@ -849,20 +853,22 @@ export class Jackpot extends BaseContract {
   };
 
   filters: {
-    "AddTicket(address,uint256)"(
+    "AddTicket(uint256,address,uint256)"(
+      round?: BigNumberish | null,
       user?: null,
       ticketId?: null
     ): TypedEventFilter<
-      [string, BigNumber],
-      { user: string; ticketId: BigNumber }
+      [BigNumber, string, BigNumber],
+      { round: BigNumber; user: string; ticketId: BigNumber }
     >;
 
     AddTicket(
+      round?: BigNumberish | null,
       user?: null,
       ticketId?: null
     ): TypedEventFilter<
-      [string, BigNumber],
-      { user: string; ticketId: BigNumber }
+      [BigNumber, string, BigNumber],
+      { round: BigNumber; user: string; ticketId: BigNumber }
     >;
 
     "ClaimReward(uint256,address,uint256)"(

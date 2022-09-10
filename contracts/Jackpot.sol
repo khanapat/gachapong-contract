@@ -40,11 +40,16 @@ contract Jackpot is
     mapping(uint256 => mapping(uint256 => address)) public ticketOwner;
     mapping(uint256 => mapping(address => uint256[])) public userTickets;
 
-    event AddTicket(address user, uint256 ticketId);
+    event AddTicket(uint256 indexed round, address user, uint256 ticketId);
 
     event ClosePool(uint256 indexed round, uint256 ref);
 
-    event GenerateRandom(uint256 indexed round, uint256 random, uint256 reward, address winner);
+    event GenerateRandom(
+        uint256 indexed round,
+        uint256 random,
+        uint256 reward,
+        address winner
+    );
 
     event ClaimReward(uint256 indexed round, address owner, uint256 reward);
 
@@ -96,7 +101,7 @@ contract Jackpot is
                 uint256 id = rounds[currentJackpotRound].jackpotId++;
                 ticketOwner[currentJackpotRound][id] = _user;
                 userTickets[currentJackpotRound][_user].push(id);
-                emit AddTicket(_user, id);
+                emit AddTicket(currentJackpotRound, _user, id);
             }
         }
         rounds[currentJackpotRound].reward += calculateAddOnReward(_betAmount);
@@ -131,7 +136,12 @@ contract Jackpot is
         result.winnerId = random;
         result.isClaimable = true;
 
-        emit GenerateRandom(_round, result.winnerId, result.reward, ticketOwner[_round][random]);
+        emit GenerateRandom(
+            _round,
+            result.winnerId,
+            result.reward,
+            ticketOwner[_round][random]
+        );
     }
 
     function _generateRandom(uint256 _ref, uint256 _totalTicket)
