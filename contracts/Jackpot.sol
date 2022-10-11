@@ -42,7 +42,11 @@ contract Jackpot is
 
     event AddTicket(uint256 indexed round, address user, uint256 ticketId);
 
-    event ClosePool(uint256 indexed round, uint256 ref);
+    event ClosePool(
+        uint256 indexed round,
+        uint256 ref,
+        uint256 accumulatedReward
+    );
 
     event GenerateRandom(
         uint256 indexed round,
@@ -115,12 +119,13 @@ contract Jackpot is
         JackpotResult storage prevRound = rounds[round];
         prevRound.ref = _ref;
 
+        uint256 accReward = prevRound.reward;
         if (prevRound.jackpotId == 0) {
-            rounds[currentJackpotRound].reward += prevRound.reward;
+            rounds[currentJackpotRound].reward += accReward;
             prevRound.reward = 0;
         }
 
-        emit ClosePool(round, _ref);
+        emit ClosePool(round, _ref, accReward);
     }
 
     function generateRandom(uint256 _round) external onlyRole(WORKER_ROLE) {

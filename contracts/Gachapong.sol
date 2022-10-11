@@ -259,10 +259,7 @@ contract Gachapong is
             rounds[lottery.lotteryRound].isClaimable,
             "Gachapong.sol: Not claimable."
         );
-        require(
-            lottery.owner == msg.sender,
-            "Gachapong.sol: Not owner."
-        );
+        require(lottery.owner == msg.sender, "Gachapong.sol: Not owner.");
 
         lottery.owner = address(0);
         uint256 reward = _calculateReward(_lotteryId);

@@ -283,7 +283,7 @@ describe("Jackpot", function () {
       const currentBlockNumber = await ethers.provider.getBlockNumber();
       await expect(jackpot.connect(worker).closePool(currentBlockNumber + 2))
         .to.emit(jackpot, closePoolEvent)
-        .withArgs(jackpotRound0, currentBlockNumber + 2);
+        .withArgs(jackpotRound0, currentBlockNumber + 2, eth(45));
 
       expect(await jackpot.currentJackpotRound()).to.equal(jackpotRound1);
 
@@ -302,7 +302,7 @@ describe("Jackpot", function () {
       const currentBlockNumber = await ethers.provider.getBlockNumber();
       await expect(jackpot.connect(worker).closePool(currentBlockNumber + 2))
         .to.emit(jackpot, closePoolEvent)
-        .withArgs(jackpotRound0, currentBlockNumber + 2);
+        .withArgs(jackpotRound0, currentBlockNumber + 2, eth(24));
 
       expect(await jackpot.currentJackpotRound()).to.equal(jackpotRound1);
 

@@ -265,7 +265,7 @@ interface JackpotInterface extends ethers.utils.Interface {
   events: {
     "AddTicket(uint256,address,uint256)": EventFragment;
     "ClaimReward(uint256,address,uint256)": EventFragment;
-    "ClosePool(uint256,uint256)": EventFragment;
+    "ClosePool(uint256,uint256,uint256)": EventFragment;
     "GenerateRandom(uint256,uint256,uint256,address)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "Paused(address)": EventFragment;
@@ -304,7 +304,11 @@ export type ClaimRewardEvent = TypedEvent<
 >;
 
 export type ClosePoolEvent = TypedEvent<
-  [BigNumber, BigNumber] & { round: BigNumber; ref: BigNumber }
+  [BigNumber, BigNumber, BigNumber] & {
+    round: BigNumber;
+    ref: BigNumber;
+    accumulatedReward: BigNumber;
+  }
 >;
 
 export type GenerateRandomEvent = TypedEvent<
@@ -889,20 +893,22 @@ export class Jackpot extends BaseContract {
       { round: BigNumber; owner: string; reward: BigNumber }
     >;
 
-    "ClosePool(uint256,uint256)"(
+    "ClosePool(uint256,uint256,uint256)"(
       round?: BigNumberish | null,
-      ref?: null
+      ref?: null,
+      accumulatedReward?: null
     ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { round: BigNumber; ref: BigNumber }
+      [BigNumber, BigNumber, BigNumber],
+      { round: BigNumber; ref: BigNumber; accumulatedReward: BigNumber }
     >;
 
     ClosePool(
       round?: BigNumberish | null,
-      ref?: null
+      ref?: null,
+      accumulatedReward?: null
     ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { round: BigNumber; ref: BigNumber }
+      [BigNumber, BigNumber, BigNumber],
+      { round: BigNumber; ref: BigNumber; accumulatedReward: BigNumber }
     >;
 
     "GenerateRandom(uint256,uint256,uint256,address)"(
