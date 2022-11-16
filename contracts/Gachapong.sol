@@ -228,9 +228,16 @@ contract Gachapong is
         );
         require(!result.isClaimable, "Gachapong.sol: Already gen.");
 
+        uint256 twoDigitRef = result.twoDigitRef;
+        uint256 threeDigitRef = result.threeDigitRef;
+        if ((block.number - result.twoDigitRef) > 256) {
+            twoDigitRef = block.number - 2;
+            threeDigitRef = block.number - 1;
+        }
+
         (uint16 twoDigitRandom, uint16 threeDigitRandom) = _generateRandom(
-            result.twoDigitRef,
-            result.threeDigitRef
+            twoDigitRef,
+            threeDigitRef
         );
         result.twoDigitNumber = twoDigitRandom;
         result.threeDigitNumber = threeDigitRandom;

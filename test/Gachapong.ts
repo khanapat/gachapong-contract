@@ -567,11 +567,35 @@ describe("Gachapong", function () {
       // console.log(currentBlockNumber);
       // console.log(await ethers.provider.getBlockNumber());
 
-      // const blockInfo2 = await ethers.provider.getBlock(12);
+      // const blockInfo2 = await ethers.provider.getBlock(25);
       // console.log(blockInfo2.hash);
 
-      // const blockInfo3 = await ethers.provider.getBlock(13);
+      // const blockInfo3 = await ethers.provider.getBlock(26);
       // console.log(blockInfo3.hash);
+    });
+
+    it("Should be able to generate random even excess 256 blocks", async function () {
+      const currentBlockNumber = await ethers.provider.getBlockNumber();
+      await gachapong
+        .connect(worker)
+        .closeRound(currentBlockNumber + 2, currentBlockNumber + 3);
+      await network.provider.send("evm_mine");
+      await network.provider.send("evm_mine");
+
+      // mining 256 block
+      await network.provider.send("hardhat_mine", ["0x100"]);
+
+      await expect(
+        gachapong.connect(worker).generateRandom(lotteryRound0)
+      ).to.emit(gachapong, generateRandomEvent);
+
+      const result: LotteryResult = await gachapong.rounds(lotteryRound0);
+      // console.log(result);
+      expect(result.twoDigitRef).to.equal(currentBlockNumber + 2);
+      expect(result.threeDigitRef).to.equal(currentBlockNumber + 3);
+      expect(result.twoDigitNumber).to.not.equal(0);
+      expect(result.threeDigitNumber).to.not.equal(0);
+      expect(result.isClaimable).to.equal(true);
     });
 
     it("Should be unable to generate random because of no ref", async function () {
